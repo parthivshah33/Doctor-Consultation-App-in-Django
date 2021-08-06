@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 import uuid
 import datetime
 import hashlib
@@ -42,17 +43,19 @@ class Contact(models.Model):
         return self.user_name
 
 class Appointments(models.Model):
-    appointmet_id = models.AutoField(primary_key=True)  # aa pachhi thi add karel chhe-->primary_key
+    id = models.AutoField(primary_key=True)  # aa pachhi thi add karel chhe-->primary_key
     username = models.CharField(max_length=40 , null=False)
     name = models.CharField(max_length=40, null=False)
-    age = models.PositiveIntegerField(null=False)
+    age = models.PositiveIntegerField(null=False , default="18")
     gender = models.CharField(max_length=10 , null=False , unique=False)
     email_id = models.EmailField(max_length=30 , null=False , unique=False)
     phone_number = models.CharField(max_length=15 , null=False)
     emergency = models.CharField(max_length=10 , null=True)
-    confirmation_code = models.CharField(max_length=10 , null=False)
+    confirmation_code = models.CharField(max_length=10 , null=False , default="0000")
     d_id = models.CharField(max_length=10 , null=False , default="1")
-    dateTime = models.CharField(max_length=30 , null=False , default="12-5-2021 , 0:00Am")
+    dateTime = models.CharField(max_length=40 , null=False , default=" ")
+    confirm = models.PositiveIntegerField(null=False,  default= 0 , editable=True)
 
     def __str__(self):
         return self.name
+

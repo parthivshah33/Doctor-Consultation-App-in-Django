@@ -127,9 +127,6 @@ def consolt_page(request):
     return render(request, 'view_page.html', params)
 
 
-
-
-
 def d_dashboard(request):
     if request.method == "POST":
         email = request.POST.get('d_email_id')
@@ -142,15 +139,61 @@ def d_dashboard(request):
 
             # aa code thi login thayela doctor na Appointments Record table tarike aave chhe
             d_id = doctor[0].id
-            record_history = Appointments.objects.filter(d_id__icontains = d_id)
+            record_history = Appointments.objects.filter(d_id__icontains = d_id)# dateTime__icontains=datetime.date.today()) aajna j case batavava hoy to
+
             params = {"doctor": doctor , "record" : record_history , "d_id" : d_id}
             return render(request, 'd_dashboard_login.html' , params)
         else:
-            print("sorry , code doesn't work")
             messages.error(request, "Invalid Password or Email , Please Try Again or Register Now")
             return render(request, 'd_dashboard_login.html')
     else:
         return render(request, 'd_dashboard_login.html')
+
+
+def case_confirm(request,id , d_id):
+    print(id)
+    doctor = Doctor.objects.filter(id = d_id)
+    print(doctor)
+
+    # aahi pela ek appointment fetch karvi padse
+    patient = Appointments.objects.filter(id=id) #aa code thi patient nu name aavse
+    print(patient)
+    confirmation_code = patient[0].confirmation_code
+    print(confirmation_code)
+    params = {"doctor": doctor[0], "d_id": d_id}
+
+    if request.method == "POST":
+        otp = request.POST.get('OTP')
+        print(otp)
+        if  confirmation_code == otp:
+            case_status = patient[0].confirm
+            print("original status :", case_status)
+            case_status = 1
+            print("Current Case Status :" , case_status)
+
+            # basically aa code am k chhe k Appointments khali case_type & Date-Time j update thay chhe bakino data as it is rehse...ok
+
+            confirm_case = Appointments(id=id,confirm = case_status, name=patient[0].name, d_id=patient[0].d_id,email_id=patient[0].email_id,
+                                                     dateTime=timezone.now(),phone_number=patient[0].phone_number,
+                                                     confirmation_code=patient[0].confirmation_code , age=patient[0].age,
+                                                     username = patient[0].username , gender=patient[0].gender ,
+                                                     emergency = patient[0].emergency)
+            confirm_case.save()
+
+
+
+            messages.success(request, "successfully worked , congratulations parthiv")
+            params = {"doctor": doctor[0], "d_id": d_id}
+
+            return render(request,"d_dashboard_login.html" , params)
+
+        else :
+            messages.error(request, "Code Not Work")
+            return render(request , "d_dashboard_login.html" , params)
+
+    params = {"doctor": doctor[0], "d_id": d_id }
+    return render(request , "d_dashboard_login.html", params)
+
 
 def Appointment_record(request , d_id):
     if request.method == "POST":
@@ -163,10 +206,12 @@ def Appointment_record(request , d_id):
         confirmation_code = request.POST.get('confirmation_code', default=" ")
         age = request.POST.get('age')
         record_history = Appointments.objects.filter(name__icontains=name , d_id__icontains=d_id,email_id__icontains=email_id,
-                                                     dateTime__icontains=date,phone_number__icontains=phone_number,
+                                                     dateTime__icontains=date,phone_number__icontains=phone_number,confirm=1,
                                                      confirmation_code__icontains=confirmation_code , age__icontains=age)
         params = {"doctor": doctor, "record": record_history, "d_id": d_id}
-    return render(request, 'Appointment_record.html' , params)
+    return render(request, 'Appointment_record.html')
+
+
 
 def consolt_view(request, consolt_id):
 

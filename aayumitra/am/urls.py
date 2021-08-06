@@ -15,6 +15,8 @@ urlpatterns = [
 
     path("Appointment_record/<int:d_id>", views.Appointment_record, name="appointment_record"),
 
+    path("case_confirm/<int:id><int:d_id>", views.case_confirm , name= "case_confirm"),
+
     path("d_search.html", views.search , name = "/d_search.html"),
 
     path("consolt_page.html", views.consolt_page , name = "consolt"),

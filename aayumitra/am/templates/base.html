@@ -11,6 +11,12 @@
   <head>
     <title>{% block title %} {% endblock %}</title>
     <meta charset="utf-8" />
+
+    <!-- code for Google Sign-In -->
+    <meta name="google-signin-client_id" content="1040835619318-dttsoru71fm7fbaa95d8h3csjub6r51g.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- Google Sign-In code finished here -->
+
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <link rel="stylesheet" href="{% static 'css/main.css' %}" />
     <link rel="stylesheet" href="{% static 'fontawesome-all.min' %}" />
@@ -39,8 +45,9 @@
 
             <!-- Logo -->
               <div id="logo">
-                <h1><a href="/">AM</a></h1>
-                <span>Your Health Is Our Priority</span>
+                <h1><a href="/">Aayu-Mitra</a></h1>
+                <span class="slogan_text" style="color:red">Your Health Is Our Priority</span>
+                
               </div>
  <!-- Nav -->
               <nav id="nav">
@@ -71,8 +78,10 @@
           </header>
         </div>
 
-
+   <!-- body tag lies here -->
 {% block body %} {% endblock %}
+   <!-- body tag lies above -->
+
       <!-- Footer -->
         <div id="footer-wrapper">
           <footer id="footer" class="container">
@@ -211,7 +220,6 @@
 </script> 
 
 {% block js %} 
-
 {% endblock%}
 
 
