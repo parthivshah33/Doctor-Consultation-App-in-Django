@@ -11,7 +11,9 @@ urlpatterns = [
 
     path("consolt_view/<int:consolt_id>", views.consolt_view , name = "consolt_view"),
 
-    path("d_dashboard" , views.d_dashboard , name = "d_dashboard"),
+    path("d_login", views.d_login, name="d_login"),
+
+    path("d_dashboard/<int:d_id>" , views.d_dashboard , name = "d_dashboard"),
 
     path("Appointment_record/<int:d_id>", views.Appointment_record, name="appointment_record"),
 

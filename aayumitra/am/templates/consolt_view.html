@@ -50,21 +50,23 @@
     color : navy;
   }
 
-  #emergency{
-    color : red;
-    
-  }
-
   #footer-wrapper{
     padding-top: 20px;
   }
 
   #appointment_button{
     margin: 7px;
+    width: 110%;
   }
 
   #emergency_text{
     color : red ;
+    font-size: 20px;
+  }
+
+  #emergency{
+    color : red;
+    
   }
 
   #back_button{
@@ -153,12 +155,15 @@
   <div class="col-12">
  
 
-    
+    <!-- (IMPORTANT) aa page par ek "i" button phota ni baju ma aavse, jena par curser lai jata messege aave k "tamne expected time tamari email par mokalvama aayvo chhe" -->
 
     <label for="inputAddress" class="form-label"> <i>Name</i> : <b>{{ doctors.name }}</b> </label>
     <br>
 
-    <label for="inputEmail4" class="form-label" id="emergency_cutoff"><i>Email</i> : <b>{{doctors.email_id}}</b> </label>
+    <label for="inputEmail4" class="form-label" id="emergency_cutoff"><i>Expected Time</i> :
+    <b><a href="#" data-toggle="tooltip" title="We will inform you in Message/Email.">i</a>
+    </b> 
+    </label>
     <br>
 
     <label for="inputAddress" class="form-label" id="emergency_cutoff"><i>Degree</i> : <b>{{ doctors.degree }}</b> </label>
@@ -195,23 +200,25 @@
       <div class="form-check">
         <input class="form-check-input" type="checkbox" id="emergency" name="emergency">
          <label class="form-check-label" for="gridCheck" id="label">
-                  <b id="emergency_text">Is ther an Emergency? </b> 
+                  <b id="emergency_text">Is ther an Emergency? 
+                  <a href="#" data-toggle="tooltip" title="Emergency charge will be applied.">i</a> 
+                  </b> 
          </label>
       </div>
     </div> <br>
 
     <div class="form-group">
-       <label for="patient_name" class="form-label">Enter Patients Full Name</label>
+       <!-- <label for="patient_name" class="form-label">Enter Patients Full Name</label> -->
        <input type="text" class="form-control" id="patient_name" name="patient_name" maxlength="30" placeholder="Patients Name" required>
        <div class="invalid-feedback">
-         Please Enter Patients Name.
+         Please Enter Patients Full Name.
        </div>
      </div>
      <br>
 
     <div class="form-group">
-     <label for="patient_age" class="form-label">Enter Gender of Patient</label>
-      <select id="Patient_age" name="patient_gender">
+     <!-- <label for="patient_age" class="form-label">Enter Gender of Patient</label> -->
+      Patients GENDER : <select id="Patient_age" name="patient_gender">
         <option value="Male">Male</option>
         <option value="Female">Female</option>
         <option value="Other Geneder">Gender</option>
@@ -223,8 +230,8 @@
     <br>
 
     <div class="form-group">
-     <label for="patient_age" class="form-label">Enter Age of Patient</label>
-      <input type="Number" name="patient_age" required min="0" max="130">
+     <!-- <label for="patient_age" class="form-label">Enter Age of Patient</label> -->
+      <input type="Number" name="patient_age" required min="0" max="130" placeholder="Age">
       <div class="invalid-feedback">
         Please Enter Valid Age of Patient.
       </div>
@@ -232,8 +239,8 @@
     <br>
 
     <div class="form-group">
-    <label for="phone_number" class="form-label">Your Phone Number :</label>
-    <input type="tel" class="form-control" id="user_phone_number" name="phone_number" maxlength="13" placeholder="+91 xx--xx" required>
+    <!-- <label for="phone_number" class="form-label">Your Phone Number :</label> -->
+    <input type="tel" class="form-control" id="user_phone_number" name="phone_number" maxlength="13" placeholder="Patient Mobile Number" required>
     <div class="invalid-feedback">
       Please provide a valid Phone Number.
     </div>

@@ -27,7 +27,7 @@ MAPBOX_KEY = "pk.eyJ1IjoicGFydGhpdnNoYWgiLCJhIjoiY2tudndpZGdmMHIzNTJua3Q4MDg2MXh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.9.12' , '127.0.0.1' , '192.168.43.12' , '192.168.43.22' , '192.168.32.12']
 
 
 # Application definition
@@ -125,8 +125,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR ,'static')
 
-MEDIA_ROOT = os.path.join(BASE_DIR , 'media')
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR , 'media')
 
 
 # Email BackEnd

@@ -1,409 +1,347 @@
 {% extends 'base.html' %}
-
 {% block title %} Aayu-Mitra.com {% endblock %}
-
 <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 {% block css %}
-<style>
+  <style>
   /*internal css here*/
-
   body {
-      color: black;
-      font-weight: 555;
-     }
-
+  color: black;
+  font-weight: 555;
+  }
   .card-img {
-    box-shadow: 10px 10px 8px #888888;
-    border: 5px;
+  box-shadow: 10px 10px 8px #888888;
+  border: 5px;
   }
-
   .search_button
-  { margin-right: 20px; 
-    margin-bottom: 10px; 
+  { margin-right: 20px;
+  margin-bottom: 10px;
   }
-
   .find-doctors{
-    width : 20%;
+  width : 25%;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
   }
-
   .search_form{
-    margin: 20px;
-    margin-top: 0px;
+  margin: 20px;
+  margin-top: 0px;
   }
-
   .find_here{
-    margin: 0px;
+  margin: 0px;
   }
-
   .modal-dialog{
-    border: 3px solid gold;
-    padding: 10px;
+  border: 3px solid gold;
+  padding: 10px;
   }
-
-   #input{
-    border: 2px solid grey;
+  #input{
+  border: 2px solid grey;
   }
-
   #login-form-button{
-    width: 40%;
-    margin : 5px 0px 0px 0px;
+  width: 40%;
+  margin : 5px 0px 0px 0px;
   }
-
   .form-label{
-    margin-bottom: 0px;
+  margin-bottom: 0px;
   }
-
   #login-button{
-    color: gold;
-    margin : 9px 0px 6px 3px;
+  color: gold;
+  margin : 9px 0px 6px 3px;
   }
-
-
   #banner{
-    margin-top: 10px;
+  margin-top: 10px;
   }
-
   .steps{
-    text-decoration: white underline;
-    color : black;
+  text-decoration: white underline;
+  color : black;
   }
-
   .how_to_use{
-    background-color : grey;
+  background-color : grey;
   }
-
-   /*sucessful message button css code*/
+  /*sucessful message button css code*/
   .message{
-    background-color :  rgb(102, 255, 102);
-    font-weight: 777;
-    text-decoration: white underline;
+  background-color :  rgb(102, 255, 102);
+  font-weight: 777;
+  text-decoration: white underline;
   }
-
-   
+  
   .success_login_message{
-    color : green;
+  color : green;
   }
-
-
-</style>
+  </style>
 {% endblock %}
-
-
-
 {% block body %}
-
-<center>{% for message in messages  %}            
-    <div class="alert alert-{{ message.tags }} alert-dismissible fade show message" id="disappears" role="alert">
-           Message : <strong class="message">{{ message }} </strong>
-
-           {% if user.is_authenticated %}
-
-              <a href="/"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-             </button></a>
-           {% else %}
-              <button type="button" class="btn btn-primary" data-dismiss="alert" aria-label="Close">
-                 <span aria-hidden="true">Login</span>
-              </button>
-
-              <a href="/"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                 <span aria-hidden="true">&times;</span>
-              </button></a>
-       </div>
-       {% endif %}
-  {% endfor %}
-</center>
-
-
-
-{% load static %}
-<!--its compulsory to add this line to every page -->
-
-<!-- Banner -->
-<div id="banner-wrapper hh">
-  <div id="banner" class="box container">
-    <div class="row">
-      <div class="col-7 col-12-medium">
-        <!-- <h7>Welcome To AM</h7> -->
-        <p><strong>"We Help You To Live Long"</strong></p>
-         {% if user.is_authenticated %}
-
-         <h1 class="success_login_message"> Welcome {{request.user}} </h1>
-
-         {% else %}
-
-    <!-- modal starts from here -->
-        <button type="button" class="btn small icon solid fa-arrow-circle-right" id="login-button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Login Here</button>
-
-        <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-       <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Enter Details :</h5>
-       </div>
-
-    <div class="modal-body">
-
-        <form action="/user_login" method="post">
-           {% csrf_token %}
-
-          <div class="mb-3">
-            <!-- <label for="recipient-name" class="form-label">Username</label> -->
-            <input type="text" class="form-control" name="login_username" id="input" placeholder="Username">
-          </div>
-
-          <div class="form-floating">
-            <label for="floatingPassword" class="form-label">Password</label>
-            <input type="password" class="form-control" id="input" name="login_password" placeholder="Password">
-          </div>
-      
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="login-form-button" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" id="login-form-button">Login</button>
-      </div>
-    </div>
-    
-  </div>
-</div>
-
- </form>
- </div>
-{% endif %}
-
-
-<!-- modal ends here -->
-
-
-   </div>
-
-      <div class="col-5 col-12-medium">
-      <ul>
- <h3 class="find_here">Find Doctors</h3>
- <form action="/d_search.html" method="get" class="d-flex search_form">
-
-    <input class="form-control me-2 search_button" type="search" id="search" name="search" placeholder="Doctors Name" aria-label="Search">
-    <button class="btn btn-outline-success find-doctors" type="submit">Find</button>
-  </form>
-
-          <li><a href="consolt_page.html" class="button large icon solid fa-arrow-circle-right">All Doctors</a></li>
-
-          <li><a href="/user_sign_up.html" class="button alt large icon solid fa-arrow-circle-left">Free Sign Up Now</a></li>
-
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-<br>
-
-<header>
-  <center>
-    <h2 class="large icon solid fa-arrow-circle-down"> Featured Doctors </h2>
-  </center>
-</header>
-<!-- Features -->
-<div id="features-wrapper">
-
-  <div class="container">
-
-    <div class="row">
-
-      <div class="col-4 col-12-medium">
-        <!-- Box -->
-        <section class="box feature">
-          <header>
-            <h2>{{ doctors.0.name }}</h2>
-            <p>{{ doctors.0.degree }}</p>
-          </header>
-
-          <div class="card mb-4" style="max-width: 540px;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src='/media/{{ doctors.0.image }}' class="card-img" alt="..." height="160px">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <p class="card-text">{{ doctors.0.city }} </p>
-                  <p class="card-text">{{ doctors.0.address }} </p>
-                  <p class="card-text">Rs.{{ doctors.0.fees }}/- </p>
-
-                  <!-- check button code from bootstrap -->
-                  <a href="consolt_view/{{doctors.0.id}}"><button type="button" class="btn btn-primary">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-calendar-check" viewBox="0 0 16 16">
-                        <path
-                          d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z">
-                        </path>
-                        <path
-                          d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z">
-                        </path>
-                      </svg>
-                      consolt
-                    </button>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-      
-
-      <!-- box stars from here -->
-      <!-- ek aakha box ni html -->
-      <div class="col-4 col-12-medium">
-        <!-- Box -->
-        <section class="box feature">
-          <header>
-            <h2>{{ doctors.1.name }}</h2>
-            <p>{{ doctors.1.degree }}</p>
-          </header>
-
-          <div class="card mb-4" style="max-width: 540px;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src='/media/{{ doctors.1.image }}' class="card-img" alt="..." height="160px">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <p class="card-text">{{ doctors.1.city }}</p>
-                  <p class="card-text">{{ doctors.1.address }}</p>
-                  <p class="card-text">Rs.{{ doctors.1.fees }}/- </p>
-
-                  <!-- check button code from bootstrap -->
-                  <a href="consolt_view/{{doctors.1.id}}"><button type="button" class="btn btn-primary">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-calendar-check" viewBox="0 0 16 16">
-                        <path
-                          d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z">
-                        </path>
-                        <path
-                          d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z">
-                        </path>
-                      </svg>
-                      consolt
-                    </button></a>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-      
-
-      <!-- new box -->
-      <div class="col-4 col-12-medium">
-        <!-- Box -->
-        <section class="box feature">
-          <header>
-            <h2>{{ doctors.2.name }}</h2>
-            <p>{{ doctors.2.degree }}</p>
-          </header>
-
-          <div class="card mb-4" style="max-width: 540px;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src='/media/{{ doctors.2.image }}' class="card-img" alt="..." height="160px">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <p class="card-text">{{ doctors.2.city }} </p>
-                  <p class="card-text">{{ doctors.2.address }} </p>
-                  <p class="card-text">Rs.{{ doctors.2.fees }}/- </p>
-
-                  <!-- check button code from bootstrap -->
-                  <a href="consolt_view/{{doctors.2.id}}"><button type="button" class="btn btn-primary">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-calendar-check" viewBox="0 0 16 16">
-                        <path
-                          d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z">
-                        </path>
-                        <path
-                          d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z">
-                        </path>
-                      </svg>
-                      consolt
-                    </button>
-                  </a>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-      
-
-
-    </div>
-  </div>
-
-</div>
-
-<!-- Main -->
-<div id="main-wrapper">
-  <div class="container">
-    <div class="row gtr-200">
-      <div class="col-4 col-12-medium">
-
-        <!-- Sidebar -->
-        <div id="sidebar">
-          <section class="widget thumbnails how_to_use">
-            <h3>How to USE It?</h3>
-            <div class="grid">
-              <span> <b class="steps"> Steps :</b> </span>
-              <div class="row gtr-50">
-                <a href="/"><div class="row-3 steps"><strong class="steps">1st --> Sign Up / Login</strong></div></a><br>
-                <div class="row-3 steps"><strong class="steps">2nd --> Find Your Doctor</strong></div>
-                <div class="row-3 steps"><strong class="steps">3rd --> Book Appointment</strong></div>
-              </div>
-            </div>
-            <a href="#" class="button icon fa-file-alt">WhatsApp Group</a>
-          </section>
+  <body>
+    <center>{% for message in messages  %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show message" id="disappears" role="alert">
+        Message : <strong class="message">{{ message }} </strong>
+        {% if user.is_authenticated %}
+          <a href="/"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button></a>
+        {% else %}
+          <button type="button" class="btn btn-primary" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">Login</span>
+          </button>
+          <a href="/"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button></a>
         </div>
-
+      {% endif %}
+    {% endfor %}
+    </center>
+    {% load static %}
+    <!--its compulsory to add this line to every page -->
+    <!-- Banner -->
+    <div id="banner-wrapper hh">
+      <div id="banner" class="box container">
+        <div class="row">
+          <div class="col-7 col-12-medium">
+            <!-- <h7>Welcome To AM</h7> -->
+            <p><strong>"We Help You To Live Long"</strong></p>
+            {% if user.is_authenticated %}
+              <h1 class="success_login_message"> Welcome {{request.user}} </h1>
+            {% else %}
+              <!-- modal starts from here -->
+              <button type="button" class="btn small icon solid fa-arrow-circle-right close_modal_whene_page_reload" id="login-button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="">Login Here</button>
+              <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-body">
+                      <form action="/user_login" method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                          <!-- <label for="recipient-name" class="form-label">Username</label> -->
+                          <input type="text" class="form-control" name="login_username" id="input_username" placeholder="Username">
+                        </div>
+                        <div class="form-floating">
+                          <label for="floatingPassword" class="form-label">Password</label>
+                          <input type="password" class="form-control" id="input_password" name="login_password" placeholder="Password">
+                        </div>
+                        
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" id="close_login-form-button" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary" id="login-form-button">Login</button>
+                        </div>
+                      </form>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+            <!-- modal ends here -->
+          </div>
+          <div class="col-5 col-12-medium">
+            <ul>
+              <h3 class="find_here">Find Doctors</h3>
+              <form action="/d_search.html" method="get" class="d-flex search_form">
+                <input class="form-control me-2 search_button" type="search" id="search" name="search" placeholder="Doctors Name" aria-label="Search">
+                <button class="btn btn-outline-success find-doctors" type="submit">Find</button>
+              </form>
+              <li><a href="consolt_page.html" class="button large icon solid fa-arrow-circle-right">All Doctors</a></li>
+              
+              {% if user.is_authenticated %}
+              {% else %}
+                <li><a href="/user_sign_up.html" class="button alt large icon solid fa-arrow-circle-left">Free Sign Up Now</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="col-8 col-12-medium imp-medium">
-
-        <!-- Content -->
-        <div id="content">
-          <section class="last">
-            <h2>All About This WebSite</h2>
-            <p>This Design is <strong>Verti</strong>, a free and fully responsive HTML5 site template by <a
+    </div>
+    <br>
+    <header>
+      <center>
+      <h2 class="large icon solid fa-arrow-circle-down"> Featured Doctors </h2>
+      </center>
+    </header>
+    <!-- Features -->
+    <div id="features-wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="col-4 col-12-medium">
+            <!-- Box -->
+            <section class="box feature">
+              <header>
+                <h2>{{ doctors.0.name }}</h2>
+                <p>{{ doctors.0.degree }}</p>
+              </header>
+              <div class="card mb-4" style="max-width: 540px;">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img src='/media/{{ doctors.0.image }}' class="card-img" alt="..." height="160px">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <p class="card-text">{{ doctors.0.city }} </p>
+                      <p class="card-text">{{ doctors.0.address }} </p>
+                      <p class="card-text">Rs.{{ doctors.0.fees }}/- </p>
+                      <!-- check button code from bootstrap -->
+                      <a href="consolt_view/{{doctors.0.id}}"><button type="button" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-calendar-check" viewBox="0 0 16 16">
+                          <path
+                            d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z">
+                          </path>
+                          <path
+                            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z">
+                          </path>
+                        </svg>
+                        consolt
+                        </button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          
+          <!-- box stars from here -->
+          <!-- ek aakha box ni html -->
+          <div class="col-4 col-12-medium">
+            <!-- Box -->
+            <section class="box feature">
+              <header>
+                <h2>{{ doctors.1.name }}</h2>
+                <p>{{ doctors.1.degree }}</p>
+              </header>
+              <div class="card mb-4" style="max-width: 540px;">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img src='/media/{{ doctors.1.image }}' class="card-img" alt="..." height="160px">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <p class="card-text">{{ doctors.1.city }}</p>
+                      <p class="card-text">{{ doctors.1.address }}</p>
+                      <p class="card-text">Rs.{{ doctors.1.fees }}/- </p>
+                      <!-- check button code from bootstrap -->
+                      <a href="consolt_view/{{doctors.1.id}}"><button type="button" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-calendar-check" viewBox="0 0 16 16">
+                          <path
+                            d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z">
+                          </path>
+                          <path
+                            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z">
+                          </path>
+                        </svg>
+                        consolt
+                      </button></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          
+          <!-- new box -->
+          <div class="col-4 col-12-medium">
+            <!-- Box -->
+            <section class="box feature">
+              <header>
+                <h2>{{ doctors.2.name }}</h2>
+                <p>{{ doctors.2.degree }}</p>
+              </header>
+              <div class="card mb-4" style="max-width: 540px;">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img src='/media/{{ doctors.2.image }}' class="card-img" alt="..." height="160px">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <p class="card-text">{{ doctors.2.city }} </p>
+                      <p class="card-text">{{ doctors.2.address }} </p>
+                      <p class="card-text">Rs.{{ doctors.2.fees }}/- </p>
+                      <!-- check button code from bootstrap -->
+                      <a href="consolt_view/{{doctors.2.id}}"><button type="button" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-calendar-check" viewBox="0 0 16 16">
+                          <path
+                            d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z">
+                          </path>
+                          <path
+                            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z">
+                          </path>
+                        </svg>
+                        consolt
+                        </button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <!-- Main -->
+    <div id="main-wrapper">
+      <div class="container">
+        <div class="row gtr-200">
+          <div class="col-4 col-12-medium">
+            <!-- Sidebar -->
+            <div id="sidebar">
+              <section class="widget thumbnails how_to_use">
+                <h3>How to USE It?</h3>
+                <div class="grid">
+                  <span> <b class="steps"> Steps :</b> </span>
+                  <div class="row gtr-50">
+                    <a href="/"><div class="row-3 steps"><strong class="steps">1st --> Sign Up / Login</strong></div></a><br>
+                    <div class="row-3 steps"><strong class="steps">2nd --> Find Your Doctor</strong></div>
+                    <div class="row-3 steps"><strong class="steps">3rd --> Book Appointment</strong></div>
+                  </div>
+                </div>
+                <a href="#" class="button icon fa-file-alt">WhatsApp Group</a>
+              </section>
+            </div>
+          </div>
+          <div class="col-8 col-12-medium imp-medium">
+            <!-- Content -->
+            <div id="content">
+              <section class="last">
+                <h2>All About This WebSite</h2>
+                <p>This Design is <strong>Verti</strong>, a free and fully responsive HTML5 site template by <a
                 href="http://html5up.net">HTML5 UP</a>.
-              Verti is released under the <a href="http://html5up.net/license">Creative Commons Attribution license</a>,
-              Click Link to Download This Verti Design. Trust Me It's Great Design...
-              I would like to Thank <a
+                Verti is released under the <a href="http://html5up.net/license">Creative Commons Attribution license</a>,
+                Click Link to Download This Verti Design. Trust Me It's Great Design...
+                I would like to Thank <a
                 href="http://html5up.net">HTML5 UP</a>. for this great Design..thank you so much HTML 5UP & Team</p>
-            <p> At Aayu-Mitra , We always try to make our users life Healthy.
+                <p> At Aayu-Mitra , We always try to make our users life Healthy.
                 Thank You for joining Aayu-Mitra...we are always appriciates you , We are here because You all continuously Support Us!</p>
-            <a href="#" class="button icon solid fa-arrow-circle-right">Continue Reading</a>
-          </section>
+                <a href="#" class="button icon solid fa-arrow-circle-right">Continue Reading</a>
+              </section>
+            </div>
+          </div>
         </div>
-
       </div>
     </div>
   </div>
 </div>
 </div>
-</div>
-</div>
-
+</body>
 <!-- body finish here -->
-
-
 {% endblock %}
 
+{% block js %}
+<script>
+// aa code 'login_here' modal ne jate jate khulta atkavse
+// how? --> modal button page reload pachhi double click ma close thatu tu...atel be whenever page reloads this script will dblclick that button.
+
+document.getElementsByClassName("close_modal_whene_page_reload")[0].click();
+document.getElementsByClassName("close_modal_whene_page_reload")[0].click();
+
+console.log('your button is clicked two times...congrates')
+</script>
 <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
-    -->
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<!-- Option 2: Separate Popper and Bootstrap JS -->
+<!--
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+-->
+{% endblock %}

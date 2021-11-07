@@ -31,6 +31,7 @@ class Doctor(models.Model):
         return self.name
 
 class Contact(models.Model):
+    id = models.AutoField(primary_key = True)
     user_name = models.CharField(max_length=40 , null=False)
     user_phone_number = models.CharField(max_length=15 , null=False)
     user_email_id = models.CharField(max_length=25 , null=False)

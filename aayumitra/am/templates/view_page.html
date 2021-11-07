@@ -17,12 +17,20 @@
 <style>
 /*internal css here*/
 
+
   .card-img{
     box-shadow: 10px 10px 8px #888888;
     border: 5px;
     border-radius: 50%;
     width: 10rem;
     height: 10rem;
+  }
+  .card-body{
+    padding-top:3px;
+  }
+
+  .consolt_button{
+    width: 111px;
   }
 
   #footer_section{
@@ -55,6 +63,42 @@
     width:30%;
   }
 
+  .back_button{
+    margin-left:7.6%;
+  }
+   
+  /*aa code 3x3 card show karva mate chhe*/
+   
+  .flex_container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 2%;
+  }
+
+  .item {
+  flex: 0 32%;
+  height: 240px;
+  margin-bottom: 60px; /* (100-32*3)/2 */
+
+  /*border: 2px solid red;*/
+  }
+
+  /*aa media-query thi mobile ma badha boxes column ma aavi jaay  */
+
+  @media (max-width : 800px) {
+    .flex_container {
+      flex-direction: column;
+    }
+  }
+  
+  
+  /*3x3 card code finish here*/
+  
+   
+
+
 </style>
 {% endblock %}
 
@@ -73,6 +117,8 @@
 <!-- aaya thi badha doctors na card saru thay chhe -->
 <!-- cards -->
 
+
+   <!-- search button code -->
  <div class="container mx-8">
  <h3 class="find_here">Search Here:</h3>
  <form action="/d_search.html" method="get" class="d-flex">
@@ -84,34 +130,33 @@
 </div>
 
 
-<div id="features-wrapper">
+  
+  <!-- aa code doctors na card show karva mate chhe -->
+   
+  <div class="flex_container">
 
-  <div class="container">
-
+  {% for i in doctors %}
+  <div class="item">
     
-{% for i in doctors %}
-<div class="row">
-<div class="col-4 col-12-medium cards">
-        <!-- Box -->
-        <section class="box feature">
-          <header>
-            <h2>[{{i.id}}]--{{ i.name }}</h2>
-            <p> <i> <b>Degree : </b> </i> {{ i.degree }} </p>
-          </header>
+       <!-- Box -->
+        <section class="box feature" style="border: 3px dotted grey;">
+           
 
-          <div class="card mb-4" style="max-width: 540px;">
+          <div class="card" style="max-width: 540px;">
+             <h2 style="color:red;">Name : {{ i.name }}</h2>
+            <b style="color:forestgreen;">Degree : {{ i.degree }}<b>
             <div class="row g-0">
               <div class="col-md-4">
                 <img src='/media/{{ i.image }}' class="card-img" alt="..." height="160px">
               </div>
               <div class="col-md-8">
                 <div class="card-body">
-                  <p class="card-text"><b>City : </b>{{ i.city }} </p>
-                  <p class="card-text"><b>Address : </b>{{ i.address }} </p>
-                  <p class="card-text"><b>Fees : </b>Rs.{{ i.fees }}/- </p>
+                  <p class="card-text" style="color:red">*Location : {{ i.city }} </p>
+                  <p class="card-text" style="color:brown; border: 1px solid rosybrown;">*Address : {{ i.address }} </p>
+                  <p class="card-text" style="color:green;">*Aayu-Mitra Fees-->Just Rs.{{ i.fees }}/- </p>
 
                   <!-- check button code from bootstrap -->
-                  <a href="consolt_view/{{i.id}}"><button type="button" class="btn btn-primary">
+                  <a href="consolt_view/{{doctors.0.id}}"><button type="button" class="btn btn-primary consolt_button">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-calendar-check" viewBox="0 0 16 16">
                         <path
@@ -128,22 +173,24 @@
               </div>
             </div>
           </div>
-
-          
         </section>
-      </div>
-    </div>
 
-      <br><br><hr>
 
-  
+  </div>
+   {% endfor %}
+    
 
-{% endfor %}
+  </div>
 
-    </div>
-      </div>
 
-<a href="/"><div class="col-4">
+  <!-- code 4 showing doctors card is finish here -->
+
+
+
+
+
+ <!-- back button code -->
+<a href="/"><div class="col-4 back_button">
           <button type="button" class="btn btn-outline-secondary" id="back_button">Back To Home</button>
           </div></a>
 
@@ -159,12 +206,5 @@
 
 
 {% block js %}   
-<script>
-  // my javascript
-</script>
+  <!-- javascript here -->
 {% endblock %}
-
-
-
-
-

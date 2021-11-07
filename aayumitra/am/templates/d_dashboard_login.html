@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %} Aayu-Mitra.com {% endblock %}
 
@@ -119,8 +120,8 @@
   
 
   <!-- aa code jyare doctor potana dashboard ma login thay jay pachhi login credential jata rahe ane table aavi jay a na mate chhe-->
- {% if doctor is None %}
-<!-- Login form starts from here -->
+ <!-- {% if doctor is None %}
+
         <center><b class="login_text">Login Here</b></center>
  <div tabindex="-1"  aria-hidden="true">
     <div class="dialog">
@@ -148,10 +149,10 @@
     
    </div>
 </div>
- 
+  -->
 
 
- {% else %}
+ <!-- {% else %} -->
 <!-- this is main body content with table -->
 <div class="container">
 
@@ -167,7 +168,102 @@
 <!-- exel valo code aahi puro thay chhe -->
 
    
-    <!-- aa code record ma judi judi rite search karva mate chhe -->
+    
+ <b> Todays Record </b>
+<table id="table" class="table table-striped table-hover"
+       data-toggle="table"
+       data-search="true"
+       data-filter-control="true" 
+       data-show-export="true"
+       data-click-to-select="true"
+       data-toolbar="#toolbar">
+  <thead>
+    <tr>
+      <th data-field="state" data-checkbox="true">No</th>
+      <th data-field="prenom" data-filter-control="input" data-sortable="true">Name</th>
+      <th data-field="examen" data-filter-control="select" data-sortable="true">Email</th>
+      <th data-field="note" data-sortable="true">Age</th>
+      <th data-field="note" data-sortable="true">Gender</th>
+      <th data-field="note" data-sortable="true">Phone No</th>
+      <th data-field="note" data-sortable="true">Username</th>
+      <th data-field="note" data-sortable="true">Code</th>
+      <th data-field="note" data-sortable="true">Emergency</th>
+      <th data-field="date" data-filter-control="select" data-sortable="true">Date</th>
+      <th data-field="note" data-sortable="true">Confirm</th>
+    </tr>
+  </thead>
+  <tbody>
+
+      
+    {% for i in record %}
+    <tr>
+      
+      <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox">{{i.id}}</td>
+      <td>{{ i.name }}</td>
+      <td>{{ i.email_id }}</td>
+      <td>{{ i.age }}</td>
+      <td>{{ i.gender }}</td>
+      <td>{{ i.phone_number }}</td>
+      <td>{{ i.username }}</td>
+      <td>{{ i.confirmation_code }}</td>
+      <td>{{ i.emergency }}</td>
+      <td>{{ i.dateTime|slice:"0:10" }} / {{ i.dateTime|slice:"11:16" }}</td>
+      {% if i.confirm == 0 %}
+      <td>
+      <!--code for appointment confirmation == one type of modal-->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{i.id}}" data-bs-whatever="@mdo">
+  Confirm{{i.id}}
+</button>
+
+<!--Confirmation Modal Code-->
+<div class="modal fade" id="exampleModal{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm This Appointment</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-bs-label="Close">
+          <span aria-bs-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!-- modal body starts from here -->
+      <div class="modal-body">
+        
+          <form action="/case_confirm/{{i.id}}{{i.d_id}}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+    <label for="phone_number" class="form-label">Enter Confirmation Code , id : {{i.id}}</label>
+    <input type="tel" class="form-control" id="OTP" name="OTP" maxlength="13" placeholder="OTP from Email/Message" required>
+    <div class="invalid-feedback">
+      Please provide a valid Phone Number.
+    </div>
+  </div>
+  <!-- modal body ends here -->
+
+        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+      </form>
+</div>
+      </div>
+    </div>
+  </div>
+
+   </td>      <!--table data ends here -->
+    {% else %}
+    <td> <span style="color:green"> Confirmed </span></td>
+    {% endif %}
+    
+     </tr> <!--table row ends here -->
+     {% endfor %}
+    
+
+    
+
+  </tbody>
+
+</table>
+
+<!-- aa code record ma judi judi rite search karva mate chhe -->
     <form method="post" action="/Appointment_record/{{doctor.0.id}}" class="needs-validation" novalidate>
      {% csrf_token %}
 
@@ -211,102 +307,9 @@
   </div>
 
 
- <b> Todays Record </b>
-<table id="table" class="table table-striped table-hover"
-       data-toggle="table"
-       data-search="true"
-       data-filter-control="true" 
-       data-show-export="true"
-       data-click-to-select="true"
-       data-toolbar="#toolbar">
-  <thead>
-    <tr>
-      <th data-field="state" data-checkbox="true">No</th>
-      <th data-field="prenom" data-filter-control="input" data-sortable="true">Name</th>
-      <th data-field="examen" data-filter-control="select" data-sortable="true">Email</th>
-      <th data-field="note" data-sortable="true">Age</th>
-      <th data-field="note" data-sortable="true">Gender</th>
-      <th data-field="note" data-sortable="true">Phone No</th>
-      <th data-field="note" data-sortable="true">Username</th>
-      <th data-field="note" data-sortable="true">Code</th>
-      <th data-field="note" data-sortable="true">Emergency</th>
-      <th data-field="date" data-filter-control="select" data-sortable="true">Date</th>
-      <th data-field="note" data-sortable="true">Confirm</th>
-    </tr>
-  </thead>
-  <tbody>
-
-      
-    {% for i in record %}
-    <tr>
-      
-      <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox">{{i.id}}</td>
-      <td>{{ i.name }}</td>
-      <td>{{ i.email_id }}</td>
-      <td>{{ i.age }}</td>
-      <td>{{ i.gender }}</td>
-      <td>{{ i.phone_number }}</td>
-      <td>{{ i.username }}</td>
-      <td>{{ i.confirmation_code }}</td>
-      <td>{{ i.emergency }}</td>
-      <td>{{ i.dateTime|slice:"0:10" }} / {{ i.dateTime|slice:"11:16" }}</td>
-      {% if i.confirm == 0 %}
-      <td>
-      <!--code for appointment confirmation == one type of modal-->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
-  Confirm{{i.id}}
-</button>
-
-<!--Confirmation Modal Code-->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Confirm This Appointment , id:{{i.id}}</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-bs-label="Close">
-          <span aria-bs-hidden="true">&times;</span>
-        </button>
-      </div>
-      <!-- modal body starts from here -->
-      <div class="modal-body">
-        
-          <form action="/case_confirm/{{i.id}}{{i.d_id}}" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-    <label for="phone_number" class="form-label">Enter Confirmation Code , id : {{i.id}}</label>
-    <input type="tel" class="form-control" id="OTP" name="OTP" maxlength="13" placeholder="OTP from Email/Message" required>
-    <div class="invalid-feedback">
-      Please provide a valid Phone Number.
-    </div>
-  </div>
-  <!-- modal body ends here -->
-
-        <button type="submit" class="btn btn-primary">Save changes</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-      </form>
-</div>
-      </div>
-    </div>
-  </div>
-
-   </td>      <!--table data ends here -->
-    {% else %}
-    <td> <span style="color:green"> Confirmed </span></td>
-    {% endif %}
-    
-     </tr> <!--table row ends here -->
-     {% endfor %}
-    
-
-    
-
-  </tbody>
-
-</table>
 
 
-{% endif %}
+<!-- {% endif %} -->
 
 
 <!-- body finish here -->
@@ -353,6 +356,92 @@
        function case_type_converter(modal)
           var confirm = modal.
      </script>
+
+
+     <!-- CODE TO TURN TEXT INTO SPEECH -->
+     <script>
+     // Initialize new SpeechSynthesisUtterance object
+
+  let speech = new SpeechSynthesisUtterance();
+
+// Set Speech Language
+speech.lang = "en";
+
+let voices = []; // global array of available voices
+
+window.speechSynthesis.onvoiceschanged = () => {
+  // Get List of Voices
+  voices = window.speechSynthesis.getVoices();
+
+  // Initially set the First Voice in the Array.
+  speech.voice = voices[0];
+
+  // Set the Voice Select List. (Set the Index as the value, which we'll use later when the user updates the Voice using the Select Menu.)
+  let voiceSelect = document.querySelector("#voices");
+  voices.forEach((voice, i) => (voiceSelect.options[i] = new Option(voice.name, i)));
+};
+
+document.querySelector("#rate").addEventListener("input", () => {
+  // Get rate Value from the input
+  const rate = document.querySelector("#rate").value;
+
+  // Set rate property of the SpeechSynthesisUtterance instance
+  speech.rate = rate;
+
+  // Update the rate label
+  document.querySelector("#rate-label").innerHTML = rate;
+});
+
+document.querySelector("#volume").addEventListener("input", () => {
+  // Get volume Value from the input
+  const volume = document.querySelector("#volume").value;
+
+  // Set volume property of the SpeechSynthesisUtterance instance
+  speech.volume = volume;
+
+  // Update the volume label
+  document.querySelector("#volume-label").innerHTML = volume;
+});
+
+document.querySelector("#pitch").addEventListener("input", () => {
+  // Get pitch Value from the input
+  const pitch = document.querySelector("#pitch").value;
+
+  // Set pitch property of the SpeechSynthesisUtterance instance
+  speech.pitch = pitch;
+
+  // Update the pitch label
+  document.querySelector("#pitch-label").innerHTML = pitch;
+});
+
+document.querySelector("#voices").addEventListener("change", () => {
+  // On Voice change, use the value of the select menu (which is the index of the voice in the global voice array)
+  speech.voice = voices[document.querySelector("#voices").value];
+});
+
+document.querySelector("#start").addEventListener("click", () => {
+  // Set the text property with the value of the textarea
+  speech.text = document.querySelector("textarea").value;
+
+  // Start Speaking
+  window.speechSynthesis.speak(speech);
+});
+
+document.querySelector("#pause").addEventListener("click", () => {
+  // Pause the speechSynthesis instance
+  window.speechSynthesis.pause();
+});
+
+document.querySelector("#resume").addEventListener("click", () => {
+  // Resume the paused speechSynthesis instance
+  window.speechSynthesis.resume();
+});
+
+document.querySelector("#cancel").addEventListener("click", () => {
+  // Cancel the speechSynthesis instance
+  window.speechSynthesis.cancel();
+});
+    </script>
 
      
      {% endblock %}
