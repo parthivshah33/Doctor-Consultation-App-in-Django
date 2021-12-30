@@ -27,7 +27,7 @@ MAPBOX_KEY = "pk.eyJ1IjoicGFydGhpdnNoYWgiLCJhIjoiY2tudndpZGdmMHIzNTJua3Q4MDg2MXh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.9.12' , '127.0.0.1' , '192.168.43.12' , '192.168.43.22' , '192.168.32.12']
+ALLOWED_HOSTS = ['192.168.9.12' , '127.0.0.1' , '192.168.43.12' , '192.168.43.22' , '192.168.32.12' ,'192.168.10.37' , '192.168.143.12']
 
 
 # Application definition
