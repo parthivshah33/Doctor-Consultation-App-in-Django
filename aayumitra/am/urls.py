@@ -35,4 +35,10 @@ urlpatterns = [
 
     path("user_logout.html", views.user_logout, name="/user_logout.html"),
 
+    # Doctors Admin Panel URLs Starts from here
+    path("doctors_earning_analytics_home/<int:d_id>", views.d_analytics_home , name="/d_analytics_home"),
+    # path("doctors_earning_analytics_base", views.d_analytics_base, name="/d_analytics_home"),
+    path("doctors_earning_analytics/profile/<int:d_id>" , views.d_analytics_profile, name = "/d_analytics_profile"),
+    path("doctors_earning_analytics/table/<int:d_id>" , views.d_analytics_table , name = "/d_analytics_table")
+
 ]

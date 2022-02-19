@@ -22,8 +22,8 @@
     box-shadow: 10px 10px 8px #888888;
     border: 5px;
     border-radius: 50%;
-    width: 10rem;
-    height: 10rem;
+    width: 6rem;
+    height: 6rem;
   }
   .card-body{
     padding-top:3px;
@@ -137,23 +137,22 @@
 
   {% for i in doctors %}
   <div class="item">
-    
        <!-- Box -->
         <section class="box feature" style="border: 3px dotted grey;">
-           
-
           <div class="card" style="max-width: 540px;">
              <h2 style="color:red;">Name : {{ i.name }}</h2>
             <b style="color:forestgreen;">Degree : {{ i.degree }}</b>
-            <div class="row g-0">
-              <div class="col-md-4">
+            <b style="color:brown;">Speciality : {{ i.specializatioin }}</b>
+
+            <div class="row g-1">
+              <div class="col-md-3">
                 <img src='/media/{{ i.image }}' class="card-img" alt="..." height="160px">
               </div>
               <div class="col-md-8">
                 <div class="card-body">
                   <p class="card-text" style="color:red">*Location : {{ i.city }} </p>
                   <p class="card-text" style="color:brown; border: 1px solid rosybrown;">*Address : {{ i.address }} </p>
-                  <p class="card-text" style="color:green;">*Aayu-Mitra Fees-->Just Rs.{{ i.fees }}/- </p>
+                  <p class="card-text" style="color:green;">*Aayu-Mitra Fees-->Rs.{{ i.fees }}/- </p>
 
                   <!-- check button code from bootstrap -->
                   <a href="consolt_view/{{i.id}}"><button type="button" class="btn btn-primary consolt_button">
@@ -166,7 +165,7 @@
                           d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z">
                         </path>
                       </svg>
-                      consolt
+                      Details
                     </button>
                   </a>
                 </div>
@@ -174,8 +173,6 @@
             </div>
           </div>
         </section>
-
-
   </div>
    {% endfor %}
     

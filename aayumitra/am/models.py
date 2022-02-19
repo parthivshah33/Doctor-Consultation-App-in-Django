@@ -1,8 +1,5 @@
 from django.db import models
-from django import forms
-import uuid
 import datetime
-import hashlib
 
 # Create your models here.
 
@@ -55,7 +52,7 @@ class Appointments(models.Model):
     confirmation_code = models.CharField(max_length=10 , null=False , default="0000")
     d_id = models.CharField(max_length=10 , null=False , default="1")
     dateTime = models.CharField(max_length=40 , null=False , default=" ")
-    confirm = models.PositiveIntegerField(null=False,  default= 0 , editable=True)
+    confirm = models.BooleanField(null=False , default=False , editable=True)
 
     def __str__(self):
         return self.name

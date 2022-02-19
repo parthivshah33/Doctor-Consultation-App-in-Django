@@ -8,7 +8,6 @@ from django.http import HttpResponseRedirect
 # to do merged queries
 from itertools import chain  # aa import queries ne merge karva mate chhe
 
-
 # aa code geek4geeks mathi email sending mate lidhelo chhe
 from django.conf import settings
 from django.core.mail import send_mail
@@ -20,10 +19,9 @@ from django.utils import timezone
 
 
 # aa code mobile phone messege mokalva mate
-import zerosms
-import getpass
+# import zerosms
+# import getpass
 # code finish here
-
 
 
 # creat your views here
@@ -41,7 +39,7 @@ def search(request):
 
         doctors_address = Doctor.objects.filter(address__icontains=query)
         doctors_specializatioin = Doctor.objects.filter(specializatioin__icontains=query)
-        doctors_city = Doctor.objects.filter(city__icontains = query)
+        doctors_city = Doctor.objects.filter(city__icontains=query)
 
         doctors = list(chain(doctors_name or doctors_address or doctors_specializatioin or doctors_city))
         params = {'doctors': doctors}
@@ -93,7 +91,6 @@ def user_sign_up(request):
         recipient_list = [myuser.email]
         send_mail(subject, message, email_from, recipient_list)
 
-
         return redirect('/')
 
     else:
@@ -131,38 +128,42 @@ def consolt_page(request):
     params = {'doctors': doctors}
     return render(request, 'view_page.html', params)
 
+
 def d_login(request):
     if request.method == "POST":
         email = request.POST.get('d_email_id')
         password = request.POST.get('d_password')
-        doctor = Doctor.objects.filter(email_id__icontains=email , password__icontains = password) #aa code ek fix doctor return karse
-        print( doctor)
+        doctor = Doctor.objects.filter(email_id__icontains=email,
+                                       password__icontains=password)  # aa code ek fix doctor return karse
+        print(doctor)
 
         # aa che login vali process
         if email == doctor[0].email_id and password == doctor[0].password:
-            messages.success(request ,"Login Successfull, Thanks for Using Aayu-Mitra")
+            messages.success(request, "Login Successfull, Thanks for Using Aayu-Mitra")
 
             # aa code thi login thayela doctor na Appointments Record table tarike aave chhe
             d_id = doctor[0].id
 
-            params = {"doctor": doctor[0] , "d_id" : d_id}
-            return render(request, 'd_login.html' , params)
-    else :
-        return render(request,'d_login.html')
+            params = {"doctor": doctor[0], "d_id": d_id}
+            return render(request, 'd_login.html', params)
+    else:
+        return render(request, 'd_login.html')
+
 
 def d_dashboard(request, d_id):
     if request.method == "GET":
         if d_id is not None:
             doctor = Doctor.objects.filter(id=d_id)
 
-            messages.success(request ,"Login Successfull, Thanks for Using Aayu-Mitra.com")
+            messages.success(request, "Login Successfull, Thanks for Using Aayu-Mitra.com")
 
             # aa code thi login thayela doctor na Appointments Record table tarike aave chhe
             d_id = doctor[0].id
-            record_history = Appointments.objects.filter(d_id__icontains = d_id)# dateTime__icontains=datetime.date.today()) aajna j case batavava hoy to
+            record_history = Appointments.objects.filter(
+                d_id__icontains=d_id)  # dateTime__icontains=datetime.date.today()) aajna j case batavava hoy to
 
-            params = {"doctor": doctor , "record" : record_history , "d_id" : d_id}
-            return render(request, 'd_dashboard_login.html' , params)
+            params = {"doctor": doctor, "record": record_history, "d_id": d_id}
+            return render(request, 'd_dashboard_login.html', params)
         else:
             messages.error(request, "Invalid Password or Email , Please Try Again or Register Now")
             return render(request, 'd_login.html')
@@ -170,13 +171,13 @@ def d_dashboard(request, d_id):
         return render(request, 'd_login.html')
 
 
-def case_confirm(request,id , d_id):
+def case_confirm(request, id, d_id):
     print(id)
-    doctor = Doctor.objects.filter(id = d_id)
+    doctor = Doctor.objects.filter(id=d_id)
     print(doctor)
 
     # aahi pela ek appointment fetch karvi padse
-    patient = Appointments.objects.filter(id=id) #aa code thi patient nu name aavse
+    patient = Appointments.objects.filter(id=id)  # aa code thi patient nu name aavse
     print(patient)
     confirmation_code = patient[0].confirmation_code
     print(confirmation_code)
@@ -185,61 +186,83 @@ def case_confirm(request,id , d_id):
     if request.method == "POST":
         otp = request.POST.get('OTP')
         print(otp)
-        if  confirmation_code == otp:
+        if confirmation_code == otp:
             case_status = patient[0].confirm
             print("original status :", case_status)
-            case_status = 1
-            print("Current Case Status :" , case_status)
+            case_status = True
+            print("Current Case Status :", case_status)
 
             # basically aa code am k chhe k Appointments khali case_type & Date-Time j update thay chhe bakino data as it is rehse...ok
 
-            confirm_case = Appointments(id=id,confirm = case_status, name=patient[0].name, d_id=patient[0].d_id,email_id=patient[0].email_id,
-                                                     dateTime=timezone.now(),phone_number=patient[0].phone_number,
-                                                     confirmation_code=patient[0].confirmation_code , age=patient[0].age,
-                                                     username = patient[0].username , gender=patient[0].gender ,
-                                                     emergency = patient[0].emergency)
+            confirm_case = Appointments(id=id, confirm=case_status, name=patient[0].name, d_id=patient[0].d_id,
+                                        email_id=patient[0].email_id,
+                                        dateTime=timezone.now(), phone_number=patient[0].phone_number,
+                                        confirmation_code=patient[0].confirmation_code, age=patient[0].age,
+                                        username=patient[0].username, gender=patient[0].gender,
+                                        emergency=patient[0].emergency)
             confirm_case.save()
-
-
 
             messages.success(request, "successfully worked , congratulations parthiv")
             params = {"doctor": doctor[0], "d_id": d_id}
 
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER'), params) #aa code user ne POST request pachhi same page par lava mate
-        else :
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'),
+                                        params)  # aa code user ne POST request pachhi same page par lava mate
+        else:
             messages.error(request, "Code Not Work")
-            return render(request , "d_dashboard_login.html" , params)
+            return render(request, "d_dashboard_login.html", params)
 
-    params = {"doctor": doctor[0], "d_id": d_id }
-    return render(request , "d_dashboard_login.html", params)
+    params = {"doctor": doctor[0], "d_id": d_id}
+    return render(request, "d_dashboard_login.html", params)
 
 
 def Appointment_record(request, d_id):
     if request.method == "POST":
         doctor = Doctor.objects.all()
         name = request.POST.get('name')
-        print(name)
         email_id = request.POST.get('email', default=" ")
         date = request.POST.get('date', default=" ")
         phone_number = request.POST.get('phone_number', default=" ")
         confirmation_code = request.POST.get('confirmation_code', default=" ")
         age = request.POST.get('age')
-        record_history = Appointments.objects.filter(name__icontains=name , d_id__icontains=d_id,email_id__icontains=email_id,
-                                                     dateTime__icontains=date,phone_number__icontains=phone_number,confirm=1,
-                                                     confirmation_code__icontains=confirmation_code , age__icontains=age)
+        record_history = Appointments.objects.filter(name__icontains=name, d_id__icontains=d_id,
+                                                     email_id__icontains=email_id,
+                                                     dateTime__icontains=date, phone_number__icontains=phone_number,
+                                                     confirm=1,
+                                                     confirmation_code__icontains=confirmation_code, age__icontains=age)
         params = {"doctor": doctor, "record": record_history, "d_id": d_id}
-    return render(request, 'Appointment_record.html' , params)
+    return render(request, 'Appointment_record.html', params)
 
+
+# Doctors Admin Panel Code Starts her
+
+def d_analytics_home(request, d_id):
+    doctor = Doctor.objects.filter(id=d_id)
+    d_id = doctor[0].id
+
+    # finding number of confirmed cases to evaluate monthly revenue & other data.
+    no_of_sucessful_case = Appointments.objects.filter(confirm=True).count()
+    print("hello", no_of_sucessful_case)
+    params = {"d_id": d_id, "doctor": doctor, "confirmed_cases": no_of_sucessful_case}
+    return render(request, 'd_analytics_page.html', params)
+
+
+def d_analytics_profile(request, d_id):
+    params = {"d_id": d_id}
+    return render(request, 'profile.html', params)
+
+
+def d_analytics_table(request, d_id):
+    params = {"d_id": d_id}
+    return render(request, 'table.html', params)
 
 
 def consolt_view(request, consolt_id):
-
     # fetching doctors data using id
     doctors = Doctor.objects.filter(id=consolt_id)
     appointment = Appointments.objects.filter(d_id=consolt_id)
     # print(appointment)
 
-    pending_appointments = appointment.filter(confirm = 0)
+    pending_appointments = appointment.filter(confirm=0)
     number_of_pending_appointments = int(len(pending_appointments))
 
     time_per_patient = int(doctors[0].average_time_per_patient_minute)
@@ -248,7 +271,7 @@ def consolt_view(request, consolt_id):
     print("Number of Patient in Waiting = ", number_of_pending_appointments)
 
     # aa code expected appointment time mate no chhe
-    expected_time =  (time_per_patient * number_of_pending_appointments) - time_per_patient
+    expected_time = (time_per_patient * number_of_pending_appointments) - time_per_patient
 
     print(expected_time)
 
@@ -267,13 +290,12 @@ def consolt_view(request, consolt_id):
             dateTime = timezone.now()
 
             # aaya aapde ek random number generate karsu j partient ane compounder ne confirmation ma help karse
-            confirmation_code = random.randint(1000 , 100000)
+            confirmation_code = random.randint(1000, 100000)
 
-            appointments_record = Appointments(username = username , name=name , age=age , gender=gender , email_id = email_id ,
-                                                phone_number = phone_number, emergency = emergency,
-                                                confirmation_code = confirmation_code , d_id = d_id , dateTime = dateTime)
+            appointments_record = Appointments(username=username, name=name, age=age, gender=gender, email_id=email_id,
+                                               phone_number=phone_number, emergency=emergency,
+                                               confirmation_code=confirmation_code, d_id=d_id, dateTime=dateTime)
             appointments_record.save()
-
 
             # Appointment success email sending to patient --> code is here
             subject = f' Dear {name} , Appointment Successful with {doctors[0].name}'
@@ -302,7 +324,7 @@ def consolt_view(request, consolt_id):
             messages.success(request, "Appointment Successful , Check Your Email Please-->")
             print("SUCCESS : EMAIL REACHED DOCTOR")
 
-        else :
+        else:
             return render(request, 'consolt_view.html',
                           {'doctors': doctors[0]})
 
@@ -313,12 +335,9 @@ def consolt_view(request, consolt_id):
 
     else:
         return render(request, 'consolt_view.html',
-                           {'doctors': doctors[0]})  # [0] valu logic super chhe must learn every time
+                      {'doctors': doctors[0]})  # [0] valu logic super chhe must learn every time
 
     # aaya compounder ne email ane message aave teni mate na functions aavse
-
-
-
 
     return render(request, 'consolt_view.html', {'doctors': doctors[0]})
 

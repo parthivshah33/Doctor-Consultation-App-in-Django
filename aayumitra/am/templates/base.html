@@ -9,10 +9,6 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
   <head>
     <title>{% block title %} {% endblock %}</title>
     <meta charset="utf-8" />
-    <!-- code for Google Sign-In -->
-    <meta name="google-signin-client_id" content="1040835619318-dttsoru71fm7fbaa95d8h3csjub6r51g.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <!-- Google Sign-In code finished here -->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <link rel="stylesheet" href="{% static 'css/main.css' %}" />
     <link rel="stylesheet" href="{% static 'fontawesome-all.min' %}" />
@@ -61,9 +57,11 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
           </nav>
         </header>
       </div>
+
       <!-- body tag lies here -->
       {% block body %} {% endblock %}
       <!-- body tag lies above -->
+      
       <!-- Footer -->
       <div id="footer-wrapper">
         <footer id="footer" class="container">

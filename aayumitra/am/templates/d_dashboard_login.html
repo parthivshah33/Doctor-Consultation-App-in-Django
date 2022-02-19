@@ -208,7 +208,7 @@
       <td>{{ i.confirmation_code }}</td>
       <td>{{ i.emergency }}</td>
       <td>{{ i.dateTime|slice:"0:10" }} / {{ i.dateTime|slice:"11:16" }}</td>
-      {% if i.confirm == 0 %}
+      {% if i.confirm == False %}
       <td>
       <!--code for appointment confirmation == one type of modal-->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{i.id}}" data-bs-whatever="@mdo">
