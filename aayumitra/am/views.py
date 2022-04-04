@@ -1,9 +1,11 @@
-from django.shortcuts import redirect, render, HttpResponse
+from django.shortcuts import redirect, render, HttpResponse , get_object_or_404
 from .models import Doctor, Contact, Appointments
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout , get_user
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
+import math
 
 # to do merged queries
 from itertools import chain  # aa import queries ne merge karva mate chhe
@@ -31,6 +33,38 @@ def index(request):
     params = {'doctors': doctors}
     return render(request, 'index.html', params)
 
+# @ login_required
+# def bookmarks(request , id):
+#     bookmarks = Doctor.bookmarks.filter(bookmarks=request.user)
+#     return render(request ,)
+
+ # DOCTOR BOOKMARK FEATURE
+@ login_required
+def bookmarks_add(request , id):
+    doctor = get_object_or_404(Doctor ,id = id)
+
+    if doctor.bookmark.filter(id=request.user.id).exists():
+        doctor.bookmark.remove(request.user)
+        bookmark_status = False
+    else:
+        doctor.bookmark.add(request.user)
+        bookmark_status = True
+    params = {"bookmark_status": bookmark_status}
+    print("Status : " , bookmark_status)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER' , params))
+
+@ login_required
+def my_bookmarks(request):
+    bookmarks = Doctor.objects.filter(bookmark=request.user)
+    params = {'bookmarks' : bookmarks}
+    return render(request , 'my_bookmarks.html' , params)
+
+
+
+
+
+
+ # DOCTOR BOOKMARK FEATURE ENDS HERE
 
 def search(request):
     query = request.GET['search']
@@ -43,7 +77,6 @@ def search(request):
 
         doctors = list(chain(doctors_name or doctors_address or doctors_specializatioin or doctors_city))
         params = {'doctors': doctors}
-        print(doctors)
     else:
         return HttpResponse('''<center><h1><b> We Respect Your Time. <br>
                                        Please Search Properly or Try Other Words
@@ -54,7 +87,7 @@ def search(request):
 
 def user_sign_up(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        # username = request.POST.get('username')
         fname = request.POST.get('fname')
         lname = request.POST.get('lname')
         email_id = request.POST.get('email')
@@ -62,15 +95,12 @@ def user_sign_up(request):
         password1 = request.POST.get('pass1')
         password2 = request.POST.get('pass2')
 
-        # check for any error in sign up
+        # if not username.isalnum():
+        #     messages.error(request, "username should only contain letters and numbers")
 
-        # if len(username) > 10:
-        #     messages.error(request ,"Your username must be under 10 characters")
-        #     return redirect('user_sign_up.html')
-        if not username.isalnum():
-            messages.error(request, "username should only contain letters and numbers")
-            return redirect('user_sign_up.html')
-        if (password1 != password2):
+        full_name = (fname + lname).lower()
+        username = full_name + str(random.randint(1,1000))# Username will be auto_generated so that user don't have to face integrity error
+        if password1 != password2:
             messages.error(request, "Please Match Both Passwords")
             return redirect('user_sign_up.html')
         # aaya email otp varification aapvanu chhe
@@ -90,14 +120,13 @@ def user_sign_up(request):
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [myuser.email]
         send_mail(subject, message, email_from, recipient_list)
-
-        return redirect('/')
+        signed_up_user = authenticate(username=username, password=password1)
+        if myuser:
+            login(request , myuser)
+            return redirect('/')
 
     else:
         return render(request, 'user_sign_up.html')
-
-    return render(request, 'user_sign_up.html')
-
 
 def user_login(request):
     if request.method == 'POST':
@@ -135,7 +164,6 @@ def d_login(request):
         password = request.POST.get('d_password')
         doctor = Doctor.objects.filter(email_id__icontains=email,
                                        password__icontains=password)  # aa code ek fix doctor return karse
-        print(doctor)
 
         # aa che login vali process
         if email == doctor[0].email_id and password == doctor[0].password:
@@ -151,46 +179,85 @@ def d_login(request):
 
 
 def d_dashboard(request, d_id):
+    doctor = Doctor.objects.filter(id=d_id)
+    record_history = Appointments.objects.filter(
+        d_id__icontains=d_id)  # dateTime__icontains=datetime.date.today()) aajna j case batavse hoy to
+
+
     if request.method == "GET":
         if d_id is not None:
-            doctor = Doctor.objects.filter(id=d_id)
 
             messages.success(request, "Login Successfull, Thanks for Using Aayu-Mitra.com")
 
             # aa code thi login thayela doctor na Appointments Record table tarike aave chhe
             d_id = doctor[0].id
             record_history = Appointments.objects.filter(
-                d_id__icontains=d_id)  # dateTime__icontains=datetime.date.today()) aajna j case batavava hoy to
+                d_id__icontains=d_id)  # dateTime__icontains=datetime.date.today()) aajna j case batavse hoy to
 
             params = {"doctor": doctor, "record": record_history, "d_id": d_id}
             return render(request, 'd_dashboard_login.html', params)
         else:
             messages.error(request, "Invalid Password or Email , Please Try Again or Register Now")
             return render(request, 'd_login.html')
-    else:
-        return render(request, 'd_login.html')
+
+    if request.method == 'POST':
+
+        # user apppointment le atle a no badho data aahi fetch thase (emergency sahit)
+        username = '-'
+        name = request.POST.get('patient_name')
+        age = request.POST.get('patient_age')
+        gender = request.POST.get('patient_gender')
+        email_id = '-'
+        phone_number = request.POST.get('phone_number')
+        emergency = request.POST.get('emergency')
+        d_id = d_id
+        dateTime = timezone.now()
+
+        # aaya aapde ek random number generate karsu j partient ane compounder ne confirmation ma help karse
+        confirmation_code = random.randint(1000, 100000)
+
+        appointments_record = Appointments(username=username, name=name, age=age, gender=gender,
+                                           email_id=email_id,
+                                           phone_number=phone_number, emergency=emergency,
+                                           confirmation_code=confirmation_code, d_id=d_id, dateTime=dateTime)
+        appointments_record.save()
+
+        # New Appointment email sending to Doctor --> code is here
+        subject = f' Greeting Sir , New Appointment from Aayu-Mitra.com'
+        message = f' -> Patient Details <- \n \n' \
+                  f' ==> Name : {name}  \n' \
+                  f' ==> Gender : {gender} \n' \
+                  f' ==> Age : {age} \n' \
+                  f' ==> Phone Number : {phone_number} \n' \
+                  f' ==> Emergency : {emergency} \n' \
+                  f' ==> Confirmation Code : {confirmation_code} (please NOTE it)'
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [doctor[0].email_id]
+        send_mail(subject, message, email_from, recipient_list)
+        messages.success(request, "Appointment Successful , Check Your Email Please-->")
+        print("SUCCESS : EMAIL REACHED DOCTOR")
+
+
+        params = {"doctor": doctor, "record": record_history, "d_id": d_id}
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'),
+                                    params)  # aa code user ne POST request pachhi same page par lava mate
+
+
 
 
 def case_confirm(request, id, d_id):
-    print(id)
     doctor = Doctor.objects.filter(id=d_id)
-    print(doctor)
 
     # aahi pela ek appointment fetch karvi padse
     patient = Appointments.objects.filter(id=id)  # aa code thi patient nu name aavse
-    print(patient)
     confirmation_code = patient[0].confirmation_code
-    print(confirmation_code)
     params = {"doctor": doctor[0], "d_id": d_id}
 
     if request.method == "POST":
         otp = request.POST.get('OTP')
         print(otp)
         if confirmation_code == otp:
-            case_status = patient[0].confirm
-            print("original status :", case_status)
             case_status = True
-            print("Current Case Status :", case_status)
 
             # basically aa code am k chhe k Appointments khali case_type & Date-Time j update thay chhe bakino data as it is rehse...ok
 
@@ -202,7 +269,7 @@ def case_confirm(request, id, d_id):
                                         emergency=patient[0].emergency)
             confirm_case.save()
 
-            messages.success(request, "successfully worked , congratulations parthiv")
+            messages.success(request, "Appointment Confirmed!")
             params = {"doctor": doctor[0], "d_id": d_id}
 
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'),
@@ -215,6 +282,7 @@ def case_confirm(request, id, d_id):
     return render(request, "d_dashboard_login.html", params)
 
 
+# Appointment_record : aa page juna case na records jova mate nu chhe.
 def Appointment_record(request, d_id):
     if request.method == "POST":
         doctor = Doctor.objects.all()
@@ -240,9 +308,13 @@ def d_analytics_home(request, d_id):
     d_id = doctor[0].id
 
     # finding number of confirmed cases to evaluate monthly revenue & other data.
-    no_of_sucessful_case = Appointments.objects.filter(confirm=True).count()
-    print("hello", no_of_sucessful_case)
-    params = {"d_id": d_id, "doctor": doctor, "confirmed_cases": no_of_sucessful_case}
+    no_of_sucessful_case = Appointments.objects.filter(confirm=True & d_id).count()
+    print("no of successful cases : ", no_of_sucessful_case)
+    no_of_total_cases_registered = Appointments.objects.count()
+    print("per_month_cases : ", no_of_total_cases_registered)
+
+    params = {"d_id": d_id, "doctor": doctor, "confirmed_cases": no_of_sucessful_case,
+              "total_cases_solved": no_of_total_cases_registered}
     return render(request, 'd_analytics_page.html', params)
 
 
@@ -257,27 +329,35 @@ def d_analytics_table(request, d_id):
 
 
 def consolt_view(request, consolt_id):
+    # code for bookmark feature
+    bookmarked_doctor = get_object_or_404(Doctor ,id = consolt_id)
+    if bookmarked_doctor.bookmark.filter(id=request.user.id).exists():
+        bookmark_status = True
+    else :
+        bookmark_status = False
+
+
+
+
     # fetching doctors data using id
     doctors = Doctor.objects.filter(id=consolt_id)
     appointment = Appointments.objects.filter(d_id=consolt_id)
     # print(appointment)
 
-    pending_appointments = appointment.filter(confirm=0)
+    pending_appointments = appointment.filter(confirm=False)
     number_of_pending_appointments = int(len(pending_appointments))
 
     time_per_patient = int(doctors[0].average_time_per_patient_minute)
 
-    print("Time per Patient =", time_per_patient)
-    print("Number of Patient in Waiting = ", number_of_pending_appointments)
-
     # aa code expected appointment time mate no chhe
-    expected_time = (time_per_patient * number_of_pending_appointments) - time_per_patient
-
-    print(expected_time)
+    # it should be printed as Hours:minute formate
+    expected_time_in_minute = (time_per_patient * number_of_pending_appointments) - time_per_patient
+    expected_time_in_hours = float(expected_time_in_minute / 60)
+    remaining_time_in_minute = (expected_time_in_hours - int(expected_time_in_hours)) * 60
+    # {int(expected_time / 60)}: {(float(expected_time / 60) - int(expected_time)) * 60}
 
     if request.user.is_authenticated:
         if request.method == 'POST':
-            print(request.user)
             # user apppointment le atle a no badho data aahi fetch thase (emergency sahit)
             username = request.user.username
             name = request.POST.get('patient_name')
@@ -299,10 +379,12 @@ def consolt_view(request, consolt_id):
 
             # Appointment success email sending to patient --> code is here
             subject = f' Dear {name} , Appointment Successful with {doctors[0].name}'
-            message = f' Thank You, for Using Aayu-Mitra.com \n' \
-                      f' We have Sent Your Details to {doctors[0].name} , They will Shortly Contact You. Stay Blessed \n' \
-                      f' Note That Your Confirmation Code is {confirmation_code} \n' \
-                      f' Expected Time left for Your Appointment is {expected_time} mitues'
+
+            message = f' We have Sent Your Details to {doctors[0].name} \n' \
+                      f' Please NOTE Your Confirmation Code is ""{confirmation_code}"" \n' \
+                      f' Expected Time : {int(expected_time_in_hours)}:{int(remaining_time_in_minute)} Hours \n' \
+                      f' Thank You, for Using Aayu-Mitra.com \n' \
+                      f' We wish you get well soon \n'
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [email_id]
             send_mail(subject, message, email_from, recipient_list)
@@ -310,14 +392,14 @@ def consolt_view(request, consolt_id):
 
             # New Appointment email sending to Doctor --> code is here
             subject = f' Greeting Sir , New Appointment from Aayu-Mitra.com'
-            message = f' {username} has Apppointed You. Here is All Details \n' \
-                      f' Name : {name}  \n' \
-                      f' Gender : {gender} \n' \
-                      f' Age : {age} \n' \
-                      f' Email : {request.user.email} \n' \
-                      f' Phone Number : {phone_number} \n' \
-                      f' Emergency : {emergency} \n' \
-                      f' Please Note Your Confirmation Code : {confirmation_code}'
+            message = f' -> Patient Details <- \n \n' \
+                      f' ==> Name : {name}  \n' \
+                      f' ==> Gender : {gender} \n' \
+                      f' ==> Age : {age} \n' \
+                      f' ==> Email : {request.user.email} \n' \
+                      f' ==> Phone Number : {phone_number} \n' \
+                      f' ==> Emergency : {emergency} \n' \
+                      f' ==> Confirmation Code : {confirmation_code} (please NOTE it)'
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [doctors[0].email_id]
             send_mail(subject, message, email_from, recipient_list)
@@ -325,8 +407,8 @@ def consolt_view(request, consolt_id):
             print("SUCCESS : EMAIL REACHED DOCTOR")
 
         else:
-            return render(request, 'consolt_view.html',
-                          {'doctors': doctors[0]})
+            params = {"bookmark_status" : bookmark_status , "doctors": doctors[0]}
+            return render(request, 'consolt_view.html', params)
 
     elif request.method == 'POST' and not request.user.is_authenticated:
         return HttpResponse('''<center><h1><b> We Respect Your Time. <br>

@@ -80,9 +80,9 @@
   }
 
   .needs-validation{
-
+    display: inline-table;
     width : 30%;
-    margin : 50px 3px 0px 3px;
+    margin : 50px 100px 0px 3px;
   }
 
   .form-control{
@@ -98,6 +98,11 @@
   tr{
     border: solid green;
   }
+
+  /*Appointment Form CSS from Consult_view.html */
+
+
+  /*Appointment Form CSS Finish Here */
 
 </style>
 {% endblock %}
@@ -231,7 +236,7 @@
           <form action="/case_confirm/{{i.id}}{{i.d_id}}" method="post">
             {% csrf_token %}
             <div class="form-group">
-    <label for="phone_number" class="form-label">Enter Confirmation Code , id : {{i.id}}</label>
+    <label for="phone_number" class="form-label">Enter Confirmation Code</label>
     <input type="tel" class="form-control" id="OTP" name="OTP" maxlength="13" placeholder="OTP from Email/Message" required>
     <div class="invalid-feedback">
       Please provide a valid Phone Number.
@@ -302,9 +307,173 @@
     <span>Find Full Records Here : </span><button type="submit" class="btn btn-primary form-group" id="appointment_button">Find</button>
   </div>
 
-  
   </form>
-  </div>
+
+
+
+   <!-- consolt button form code -->
+  <form
+    method="post"
+    action="/d_dashboard/{{doctor.0.id}}"
+    class="needs-validation"
+    novalidate
+  >
+     {% csrf_token %}
+
+    <div
+      class="container-fluid bg-light bg-gradient border rounded-0 border-dark"
+    >
+      <h1>Appointment Form</h1>
+
+      <hr />
+      <div
+        class="form-check"
+        style="
+          margin: 3px;
+          color: var(--bs-red);
+          font-weight: bold;
+          text-decoration: underline;
+          box-shadow: inset 0px 0px var(--bs-gray-dark);
+          border-color: var(--bs-red);
+          margin-bottom: 8px;
+          margin-top: -7px;
+        "
+      >
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="emergency"
+          name="emergency"
+        /><label
+          class="form-check-label"
+          style="font-weight: bold; border-color: rgb(217, 27, 45)"
+          >Emergency?   <a href="#" data-toggle="tooltip" title="Emergency charge will be applied.">i</a></label
+        >
+      </div>
+      
+        <div class="row">
+          <div class="col-md-6">
+            <div id="successfail-1"></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-md-6" id="message-1">
+            <div class="form-group mb-3">
+              <div class="input-group">
+                <span class="input-group-text"
+                  ><i class="fa fa-user-o"></i></span
+                ><input
+                  class="form-control"
+                  type="text"
+                  id="patient_name"
+                  name="patient_name"
+                  required=""
+                  placeholder="Patients Name"
+                />
+              </div>
+            </div>
+
+            <select
+              class="form-select"
+              id="Patient_gender"
+              name="patient_gender"
+              required=""
+              style="margin-top: -6px; margin-bottom: 12px"
+            >
+              <option value="Male" selected="">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option></select
+            >
+
+            <input
+              class="form-control"
+              type="number"
+              style="
+                padding-bottom: -2px;
+                margin: 2px;
+                padding-top: -3px;
+                height: 31px;
+                margin-top: -2px;
+                margin-bottom: 9px;
+              "
+              name="patient_age"
+              placeholder="Patient Age"
+              min="1" max="130"
+            />
+
+            <div class="row">
+              <div
+                class="col-12 col-sm-6 col-md-12 col-lg-6"
+                style="padding-bottom: -29px"
+              >
+                <div class="form-group mb-3">
+                  <div class="input-group">
+                    <span class="input-group-text"
+                      ><i class="fa fa-phone"></i></span
+                    >
+                    <input
+                      class="form-control"
+                      type="tel"
+                      id="user_phone_number"
+                      name="phone_number"
+                      maxlength="10"
+                      placeholder="Patient Mobile Number"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group mb-3">
+                  <div class="input-group">
+                    <div class="input-group-prepend"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <div class="row">
+                <div class="col">
+                  <button
+                    class="btn btn-primary d-block w-100"
+                    type="submit"
+                    style="
+                      padding-top: 6px;
+                      padding-bottom: 6px;
+                      margin: 0px;
+                      margin-bottom: 9px;
+                      margin-top: -17px;
+                    "
+                  >Book&nbsp;<i class="fa fa-chevron-circle-right"></i></button>
+                  <button
+                    class="btn btn-primary d-block w-100"
+                    type="reset"
+                    style="padding-top: -2px; padding-bottom: 6px"
+                  >
+                    <i class="fa fa-undo"></i> Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+            <hr class="d-flex d-md-none" />
+          </div>
+        </div>
+    </div>
+
+  </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div> <!-- container div -->
 
 
 

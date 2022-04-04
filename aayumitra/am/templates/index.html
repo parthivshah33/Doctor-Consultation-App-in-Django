@@ -2,7 +2,7 @@
 {% load static %}
 
 
-{% block title %} Mitra.com {% endblock %}
+{% block title %} Aayu-Mitra.com {% endblock %}
 
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
@@ -17,10 +17,10 @@
   /*to add background image in banner*/
 
     .banner{
-      background : url("/static/assets/img/banner4.png");
+      background : url("/static/assets/img/banner.png");
       background-repeat: no-repeat;
-       background-attachment: fixed;    
-      background-size: 80%;
+      background-attachment: scroll;    
+      background-size: 100%;  /* start work from here //////////////////// */
       background-position: center;
     }
 
@@ -29,18 +29,47 @@
       .banner {
    background : url("/static/assets/img/banner_mobile.png");
       background-repeat: no-repeat;
-      background-attachment: fixed;     /////////////////// 
-      background-size: 94%;
+      background-attachment: scroll;
+      background-size: 1000%;
       background-position: center;
        }
     }
 
-
   /* background image end here */
+
+
+
+
+
+  /*card designing starts here*/
+
   .card-img {
   box-shadow: 10px 10px 8px #888888;
   border: 5px;
   }
+
+  .consolt_button{
+    width: 50%;
+  }
+
+  .d_card{
+    border: 3px dotted grey; 
+    border-top: 4px solid brown;
+    box-shadow: 10px 10px 8px 10px #888888;
+  }
+
+  .col-md-8{
+    padding-top: 10px;
+  }
+
+  .d_name{
+    margin-top:2px;
+    margin-bottom: 5px;
+  }
+
+  /*card designing ends here*/
+  
+
   .search_button
   { margin-right: 20px;
   margin-bottom: 10px;
@@ -57,6 +86,8 @@
   }
   .find_here{
   margin: 0px;
+  color : blanchedalmond;
+  text-shadow: 5px 5px 10px #00FF00;
   }
   .modal-dialog{
   border: 3px solid gold;
@@ -80,6 +111,8 @@
   #banner{
   margin-top: 10px;
   }
+
+  /*how to use section*/
   .steps{
   text-decoration: white underline;
   color : black;
@@ -88,15 +121,20 @@
   background-color : yellow;
   }
 
+  /*how to use section finish here*/
+
   .message{
   background-color :  rgb(102, 255, 102);
-  font-weight: 777;
+  font-weight: 77;
   text-decoration: white underline;
   }
   
   .success_login_message{
-  color : green;
+  font-family: sans-serif;
+  color : white;
+  text-shadow: 5px 5px 10px #00FF00;
   }
+
   </style>
 
 
@@ -108,7 +146,7 @@
       <div class="alert alert-{{ message.tags }} alert-dismissible fade show message" id="disappears" role="alert">
         Message : <strong class="message">{{ message }} </strong>
         {% if user.is_authenticated %}
-          <a href="/"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <a href="/"><button type="button" class="close" data-dismiss="alert" aria-label="Close" id="login-form-button">
             <span aria-hidden="true">&times;</span>
           </button></a>
         {% else %}
@@ -131,7 +169,7 @@
         <div class="row">
           <div class="col-7 col-12-medium">
             <!-- <h7>Welcome To AM</h7> -->
-            <p><strong>"Find Nearest Doctor"</strong></p>
+            <p><strong style="color:gold; text-shadow: 5px 5px 10px #262626;">"Find Nearest Doctor"</strong></p>
             {% if user.is_authenticated %}
               <h1 class="success_login_message"> Welcome {{request.user}} </h1>
             {% else %}
@@ -148,13 +186,12 @@
                           <input type="text" class="form-control" name="login_username" id="input_username" placeholder="Username">
                         </div>
                         <div class="form-floating">
-                          <label for="floatingPassword" class="form-label">Password</label>
                           <input type="password" class="form-control" id="input_password" name="login_password" placeholder="Password">
                         </div>
                         
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" id="close_login-form-button" data-bs-dismiss="modal">Close</button>
                           <button type="submit" class="btn btn-primary" id="login-form-button">Login</button>
+                          <button type="button" class="btn btn-secondary" id="login-form-button" data-bs-dismiss="modal">Close</button>
                         </div>
                       </form>
                     </div>
@@ -172,27 +209,26 @@
                 <input class="form-control me-2 search_button" type="search" id="search" name="search" placeholder="Doctors Name" aria-label="Search">
                 <button class="btn btn-outline-success find-doctors" type="submit">Find</button>
               </form>
-              <li><a href="consolt_page.html" class="button large icon solid fa-arrow-circle-right">All Doctors</a></li>
+              <li><a href="/my_bookmarks" class="button large icon solid fa-arrow-circle-right">Saved Doctors</a></li>
               
               {% if user.is_authenticated %}
               {% else %}
-                <li><a href="/user_sign_up.html" class="button alt large icon solid fa-arrow-circle-left">Free Sign Up Now</a></li>
+                <li><a href="/user_sign_up.html" class="button alt small solid" style="color:white;">Free Sign Up Now</a></li>
               {% endif %}
             </ul>
           </div>
         </div>
       </div>
     </div>
-
+    
     <br>
 
     <header>
       <center>
-      <h2 class="large icon solid fa-arrow-circle-down"> Featured Doctors </h2>
+      <h2 class="bi bi-arrow-down-circl">Featured Doctors</h2>
       </center>
     </header>
     
-
 
     <!-- Features -->
     <div id="features-wrapper" style="padding: 0  0  0 0">
@@ -204,11 +240,11 @@
        <!-- Box1 -->
   <div class="col-4 col-12-medium">
           <div class="item">
-        <section class="box feature" style="border: 3px dotted grey;">
+        <section class="box feature d_card" style="border: 3px dotted grey; border-top: 4px solid brown;">
           <div class="card" style="max-width: 540px;">
-             <h2 style="color:red;">Name : {{ doctors.0.name}}</h2>
-            <b style="color:forestgreen;">Degree : {{ doctors.0.degree }}</b>
-            <b style="color:brown;">Speciality : {{ doctors.0.specialization }}</b>
+             <h2 class="d_name" style="color:red;">Name : {{ doctors.0.name}}</h2>
+            <b style="color:forestgreen;">Degree : {{ doctors.0.degree }}</b><br>
+            <b style="color:brown;">Speciality : {{ doctors.0.specializatioin }}</b>
 
             <div class="row g-1">
               <div class="col-md-3">
@@ -221,7 +257,7 @@
                   <p class="card-text" style="color:green;">*Aayu-Mitra Fees-->Rs.{{ doctors.0.fees }}/- </p>
 
                   <!-- check button code from bootstrap -->
-                  <a href="consolt_view/{{ doctors.0.id}}"><button type="button" class="btn btn-primary consolt_button">
+                  <a href="consolt_view/{{ doctors.0.id}}"><button type="button" class="btn small btn-primary consolt_button">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-calendar-check" viewBox="0 0 16 16">
                         <path
@@ -231,7 +267,7 @@
                           d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z">
                         </path>
                       </svg>
-                      Details
+                      Book Appointment
                     </button>
                   </a>
                 </div>
@@ -248,11 +284,11 @@
   <div class="col-4 col-12-medium">
 
           <div class="item">
-        <section class="box feature" style="border: 3px dotted grey;">
+        <section class="box feature d_card">
           <div class="card" style="max-width: 540px;">
-             <h2 style="color:red;">Name : {{ doctors.1.name}}</h2>
-            <b style="color:forestgreen;">Degree : {{ doctors.1.degree }}</b>
-            <b style="color:brown;">Speciality : {{ doctors.1.specialization }}</b>
+             <h2 class="d_name" style="color:red;">Name : {{ doctors.1.name}}</h2>
+            <b style="color:forestgreen;">Degree : {{ doctors.1.degree }}</b><br>
+            <b style="color:brown;">Speciality : {{ doctors.1.specializatioin }}</b>
 
             <div class="row g-1">
               <div class="col-md-3">
@@ -275,7 +311,7 @@
                           d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z">
                         </path>
                       </svg>
-                      Details
+                      Book Appointment
                     </button>
                   </a>
                 </div>
@@ -295,11 +331,11 @@
   <div class="col-4 col-12-medium">
 
           <div class="item">
-        <section class="box feature" style="border: 3px dotted grey;">
+        <section class="box feature d_card" >
           <div class="card" style="max-width: 540px;">
-             <h2 style="color:red;">Name : {{ doctors.2.name}}</h2>
-            <b style="color:forestgreen;">Degree : {{ doctors.2.degree }}</b>
-            <b style="color:brown;">Speciality : {{ doctors.2.specialization }}</b>
+             <h2 class="d_name" style="color:red;">Name : {{ doctors.2.name}}</h2>
+            <b style="color:forestgreen;">Degree : {{ doctors.2.degree }}</b><br>
+            <b style="color:brown;">Speciality : {{ doctors.2.specializatioin }}</b>
 
             <div class="row g-1">
               <div class="col-md-3">
@@ -322,7 +358,7 @@
                           d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z">
                         </path>
                       </svg>
-                      Details
+                      Book Appointment
                     </button>
                   </a>
                 </div>
@@ -332,11 +368,13 @@
         </section>
   </div>
 </div>
-        
-          
+
         </div>
       </div>
     </div>
+
+
+  <hr>
     <!-- Main -->
     <div id="main-wrapper">
       <div class="container">
@@ -393,7 +431,6 @@
 document.getElementsByClassName("close_modal_whene_page_reload")[0].click();
 document.getElementsByClassName("close_modal_whene_page_reload")[0].click();
 
-console.log('your button is clicked two times...congrates')
 </script>
 <!-- Optional JavaScript; choose one of the two! -->
 <!-- Option 1: Bootstrap Bundle with Popper -->

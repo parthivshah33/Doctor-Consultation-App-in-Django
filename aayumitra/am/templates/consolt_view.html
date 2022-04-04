@@ -1,374 +1,508 @@
-{% extends 'base.html' %}
-
+{% extends 'base.html' %} 
 {% load static %}
-
 {% block meta-tags %}
 <!-- bootstrap meta tags for css and etc is here -->
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-{% endblock %}
-
-
-{% block css %}
+<!-- Required meta tags -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- Bootstrap CSS -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+  crossorigin="anonymous"
+/>
+{% endblock %} {% block css %}
 <style>
-/*internal css here*/
-
-  .card-img{
+  /*internal css here*/
+  .card-img {
     box-shadow: 10px 10px 8px #888888;
     border: 5px;
     border-radius: 50%;
     width: 10rem;
     height: 10rem;
   }
-
-  .doctors-details{
+  .doctors-details {
     border: 1px dashed grey;
     border-radius: 4px;
     border-top: none;
-    padding: 5px;  
+    padding: 5px;
   }
-
-  .form-check{
+  .form-check {
     height: 50%;
   }
-  
-  #footer_section{
+
+  #footer_section {
     display: none;
   }
 
-  
-  i{
-    color : brown;
+  i {
+    color: brown;
     font-weight: 777;
   }
-
-  b{
-    color : navy;
+  b {
+    color: navy;
   }
-
-  #footer-wrapper{
+  #footer-wrapper {
     padding-top: 20px;
   }
-
-  #appointment_button{
+  #appointment_button {
     margin: 7px;
     width: 110%;
   }
-
-  #emergency_text{
-    color : red ;
+  #emergency_text {
+    color: red;
     font-size: 20px;
   }
-
-  #emergency{
-    color : red;
-    
+  #emergency {
+    color: red;
   }
-
-  #back_button{
+  #back_button {
     display: inline-block;
   }
-
-  #header-wrapper{
-    padding-top : 50px;
-    padding-bottom : 10px;
+  #header-wrapper {
+    padding-top: 50px;
+    padding-bottom: 10px;
   }
-
-  .col-12{
-    padding-top : 2px;
+  .col-12 {
+    padding-top: 2px;
   }
-
   /*form ne side ma lavava no code chhe aa*/
-
-  .g-3{
-          display: inline-block;
-          margin-right:3px;
+  .g-3 {
+    display: inline-block;
+    margin-right: 3px;
   }
-  .main{
+  .main {
     display: flex;
     flex-wrap: wrap;
-
   }
-
-  .needs-validation{
-
-
-    margin : 50px 3px 0px 3px;
-
+  .needs-validation {
+    margin: 50px 3px 0px 3px;
   }
-
-
-
-
-
+  .bookmark_button{
+    float: right;
+    display: inline-block;
+  }
 </style>
-{% endblock %}
-
-
-{% block body %}
-
- {% load static %} <!--its compulsory to add this line to every page -->
-
-
-
+{% endblock %} 
+{% block body %} 
+<!--its compulsory to add this line to every page -->
 <!-- MESSAGE CODE aaya chhe -->
-<center>{% for message in messages  %}            
-    <div class="alert alert-{{ message.tags }} alert-dismissible fade show message" id="disappears" role="alert">
-           Message : <strong class="message">{{ message }} </strong>
-
-           {% if user.is_authenticated %}
-
-              <a href="/"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-             </button></a>
-           {% else %}
-              <button type="button" class="btn btn-primary" data-dismiss="alert" aria-label="Close">
-                 <span aria-hidden="true">Login</span>
-              </button>
-
-              <a href="/"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                 <span aria-hidden="true">&times;</span>
-              </button></a>
-       </div>
-       {% endif %}
-  {% endfor %}
+<center>
+  {% for message in messages %}
+  <div
+    class="alert alert-{{ message.tags }} alert-dismissible fade show message"
+    id="disappears"
+    role="alert"
+  >
+    Message : <strong class="message">{{ message }} </strong>
+    {% if user.is_authenticated %}
+    <a href="/"
+      ><button
+        type="button"
+        class="close"
+        data-dismiss="alert"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button></a
+    >
+    {% else %}
+    <button
+      type="button"
+      class="btn btn-primary"
+      data-dismiss="alert"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">Login</span>
+    </button>
+    <a href="/"
+      ><button
+        type="button"
+        class="close"
+        data-dismiss="alert"
+        aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button></a>
+  </div>
+  {% endif %} {% endfor %}
 </center>
-
-
 <!-- message code aaya puro -->
 
- <!-- main content is here -->
 
- <div class="container">
+<!-- main content is here -->
 
-<div class="row g-3">
+<!-- bookmark button -->
 
-  <div class="col-md-2">
-    <img src='/media/{{ doctors.image }}' class="card-img" alt="..." height="160px">
+{% if request.user.is_authenticated %}
+<a href="/bookmarks_add/{{doctors.id}}" class="btn btn-info btn-lg bookmark_button">
+<span class=""></span>
+{% if bookmark_status %}
+Saved
+{% else %}
+Save Now
+{% endif %}
+</a> 
+{% else %}
+<a href="/user_sign_up.html" class="btn btn-info btn-lg bookmark_button">
+<span class=""></span> Save Now
+</a>
+{% endif %}
+
+
+<!-- bookmark button finish here -->
+
+<div class="container">
+  <div class="row g-3">
+    <div class="col-md-2">
+      <img
+        src="/media/{{ doctors.image }}"
+        class="card-img"
+        alt="..."
+        height="160px"
+      />
+    </div>
+
+    <div class="col-12">
+      <!-- (IMPORTANT) aa page par ek "i" button phota ni baju ma aavse, jena par curser lai jata messege aave k "tamne expected time tamari email par mokalvama aayvo chhe" -->
+      <label for="inputAddress" class="doctors-details">
+        <i>Name</i> : <b>{{ doctors.name }}</b>
+      </label>
+      <br />
+      <label for="inputAddress" class="doctors-details" id="emergency_cutoff"
+        ><i>Degree</i> : <b>{{ doctors.degree }}</b>
+      </label>
+      <br />
+      <label for="inputAddress" class="doctors-details"
+        ><i>Address</i> : <b>{{ doctors.address }}</b>
+      </label>
+      <br />
+      <label for="inputZip" class="doctors-details" id="emergency_cutoff"
+        ><i>Fees</i> : <b>Rs : {{ doctors.fees }}/-</b>
+      </label>
+      <br />
+      <label for="inputZip" class="doctors-details"
+        ><i>Emergency Charge</i> : <b>Rs : {{ doctors.emergency_charge }}/-</b>
+      </label>
+      <br />
+      <label for="inputAddress2" class="doctors-details" id="emergency_cutoff"
+        ><i>Specializations</i> : <b>{{ doctors.specializatioin }}</b>
+      </label>
+      <br />
+      <label for="inputCity" class="doctors-details" id="emergency_cutoff"
+        ><i>City : </i> <b>{{ doctors.city }}</b>
+      </label>
+      <br />
+      <label for="inputZip" class="doctors-details"
+        ><i>TelePhone Number</i> : <b>{{ doctors.telephone_number }}</b>
+      </label>
+      <br />
+    </div>
   </div>
 
-  <div class="col-12">
- 
+  
+  <!-- consolt button form code -->
+  <form
+    method="post"
+    action="/consolt_view/{{ doctors.id }}"
+    class="needs-validation"
+    novalidate
+  >
+    {% csrf_token %}
+    <div
+      class="container-fluid bg-light bg-gradient border rounded-0 border-dark"
+    >
+      <h1>Fill &amp; Consolt Now</h1>
+      <form action="/consolt_view/{{ doctors.id }}" method="POST" class="needs-validation" novalidate>
+     {% csrf_token %}
 
-    <!-- (IMPORTANT) aa page par ek "i" button phota ni baju ma aavse, jena par curser lai jata messege aave k "tamne expected time tamari email par mokalvama aayvo chhe" -->
 
-    <label for="inputAddress" class="doctors-details"> <i>Name</i> : <b>{{ doctors.name }}</b> </label>
-    <br>
 
-    <label for="inputEmail4" class="doctors-details" id="emergency_cutoff"><i>Expected Time</i> :
-    <b><a href="#" data-toggle="tooltip" title="We will inform you in Message/Email.">i</a>
-    </b> 
-    </label>
-    <br>
 
-    <label for="inputAddress" class="doctors-details" id="emergency_cutoff"><i>Degree</i> : <b>{{ doctors.degree }}</b> </label>
-    <br>
-
-    <label for="inputAddress" class="doctors-details"><i>Address</i> : <b>{{ doctors.address }}</b> </label>
-    <br>
-
-    <label for="inputZip" class="doctors-details" id="emergency_cutoff"><i>Fees</i> : <b>Rs : {{ doctors.fees }}/-</b> </label>
-    <br>
-
-    <label for="inputZip" class="doctors-details"><i>Emergency Charge</i> : <b>Rs : {{ doctors.emergency_charge }}/-</b> </label>
-    <br>
-
-    <label for="inputAddress2" class="doctors-details" id="emergency_cutoff"><i>Specializations</i> : <b>{{ doctors.specializatioin }}</b>  </label>
-    <br>
-
-    <label for="inputCity" class="doctors-details" id="emergency_cutoff"><i>City : </i> <b>{{ doctors.city }}</b> </label>
-    <br>
-
-    <label for="inputZip" class="doctors-details"><i>TelePhone Number</i> : <b>{{ doctors.telephone_number }}</b> </label>
-    <br>
-
+      <hr />
+      <div
+        class="form-check"
+        style="
+          margin: 3px;
+          color: var(--bs-red);
+          font-weight: bold;
+          text-decoration: underline;
+          box-shadow: inset 0px 0px var(--bs-gray-dark);
+          border-color: var(--bs-red);
+          margin-bottom: 8px;
+          margin-top: -7px;
+        "
+      >
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="emergency"
+          name="emergency"
+        /><label
+          class="form-check-label"
+          style="font-weight: bold; border-color: rgb(217, 27, 45)"
+          >Emergency?   <a href="#" data-toggle="tooltip" title="Emergency charge will be applied.">i</a></label
+        >
       </div>
+      
+        <div class="row">
+          <div class="col-md-6">
+            <div id="successfail-1"></div>
+          </div>
+        </div>
 
+        <div class="row">
+          <div class="col-12 col-md-6" id="message-1">
+            <div class="form-group mb-3">
+              <div class="input-group">
+                <span class="input-group-text"
+                  ><i class="fa fa-user-o"></i></span
+                ><input
+                  class="form-control"
+                  type="text"
+                  id="patient_name"
+                  name="patient_name"
+                  required=""
+                  placeholder="Patients Name"
+                />
+              </div>
+            </div>
+
+            <select
+              class="form-select"
+              id="Patient_gender"
+              name="patient_gender"
+              required=""
+              style="margin-top: -6px; margin-bottom: 12px"
+            >
+              <option value="Male" selected="">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option></select
+            >
+
+            <input
+              class="form-control"
+              type="number"
+              style="
+                padding-bottom: -2px;
+                margin: 2px;
+                padding-top: -3px;
+                height: 31px;
+                margin-top: -2px;
+                margin-bottom: 9px;
+              "
+              name="patient_age"
+              placeholder="Patient Age"
+              min="1" max="130"
+            />
+
+            <div class="row">
+              <div
+                class="col-12 col-sm-6 col-md-12 col-lg-6"
+                style="padding-bottom: -29px"
+              >
+                <div class="form-group mb-3">
+                  <div class="input-group">
+                    <span class="input-group-text"
+                      ><i class="fa fa-phone"></i></span
+                    >
+                    <input
+                      class="form-control"
+                      type="tel"
+                      id="user_phone_number"
+                      name="phone_number"
+                      maxlength="10"
+                      placeholder="Patient Mobile Number"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group mb-3">
+                  <div class="input-group">
+                    <div class="input-group-prepend"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <div class="row">
+                <div class="col">
+                  <button
+                    class="btn btn-primary d-block w-100"
+                    type="submit"
+                    style="
+                      padding-top: 6px;
+                      padding-bottom: 6px;
+                      margin: 0px;
+                      margin-bottom: 9px;
+                      margin-top: -17px;
+                    "
+                  >
+                    Book&nbsp;<i class="fa fa-chevron-circle-right"></i></button
+                  ><button
+                    class="btn btn-primary d-block w-100"
+                    type="reset"
+                    style="padding-top: -2px; padding-bottom: 6px"
+                  >
+                    <i class="fa fa-undo"></i> Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+            <hr class="d-flex d-md-none" />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="modal1">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>Contact Information</h4>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="contactForm-2" action="javascript:void(0);" method="get">
+              <input
+                class="form-control"
+                type="hidden"
+                name="Introduction"
+                value="This email was sent from www.awebsite.com"
+              /><input
+                class="form-control"
+                type="hidden"
+                name="subject"
+                value="Awebsite.com Contact Form"
+              /><input
+                class="form-control"
+                type="hidden"
+                name="to"
+                value="email@awebsite.com"
+              />
+              <div class="row">
+                <div class="col-md-6">
+                  <div id="successfail-2"></div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 col-md-6" id="message-2">
+                  <h2 class="h4">
+                    <i class="fa fa-envelope"></i> Contact Us<small
+                      ><small class="required-input"
+                        >&nbsp;(*required)</small
+                      ></small>
+                  </h2>
+                  <div class="form-group mb-3">
+                    <label class="form-label" for="from-name">Name</label
+                    ><span class="required-input">*</span>
+                    <div class="input-group">
+                      <span class="input-group-text"
+                        ><i class="fa fa-user-o"></i></span
+                      ><input
+                        class="form-control"
+                        type="text"
+                        id="from-name-2"
+                        name="name"
+                        required=""
+                        placeholder="Full Name"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label class="form-label" for="from-email">Email</label
+                    ><span class="required-input">*</span>
+                    <div class="input-group">
+                      <span class="input-group-text"
+                        ><i class="fa fa-envelope-o"></i></span
+                      ><input
+                        class="form-control"
+                        type="text"
+                        id="from-email-2"
+                        name="email"
+                        required=""
+                        placeholder="Email Address"
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 col-sm-6 col-md-12 col-lg-6">
+                      <div class="form-group mb-3">
+                        <label class="form-label" for="from-phone">Phone</label
+                        ><span class="required-input">*</span>
+                        <div class="input-group">
+                          <span class="input-group-text"
+                            ><i class="fa fa-phone"></i></span
+                          ><input
+                            class="form-control"
+                            type="text"
+                            id="from-phone-2"
+                            name="phone"
+                            required=""
+                            placeholder="Primary Phone"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="d-flex d-md-none" />
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
 
 
-    <!-- consolt button form code -->
-    <form method="post" action="/consolt_view/{{ doctors.id }}" class="needs-validation" novalidate>
-     {% csrf_token %}
 
-    <div class="container-fluid bg-light bg-gradient border rounded-0 border-dark">
-            <h1>Fill &amp; Consolt Now</h1>
-            <hr>
-            <div class="form-check" style="margin: 3px;color: var(--bs-red);font-weight: bold;text-decoration: underline;box-shadow: inset 0px 0px var(--bs-gray-dark);border-color: var(--bs-red);margin-bottom: 8px;margin-top: -7px;"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1" style="font-weight: bold;border-color: rgb(217,27,45);">Emergency?</label></div>
-            <form id="contactForm-1" action="javascript:void(0);" method="get"><input class="form-control" type="hidden" name="Introduction" value="This email was sent from www.awebsite.com"><input class="form-control" type="hidden" name="subject" value="Awebsite.com Contact Form"><input class="form-control" type="hidden" name="to" value="email@awebsite.com">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div id="successfail-1"></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-6" id="message-1">
-                        <div class="form-group mb-3">
-                            <div class="input-group"><span class="input-group-text"><i class="fa fa-user-o"></i></span><input class="form-control" type="text" id="from-name-1" name="name" required="" placeholder="Full Name"></div>
-                        </div><select class="form-select" id="from-calltime-1" name="call time" required="" style="margin-top: -6px;margin-bottom: 12px;">
-                            <option value="Male" selected="">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select><input class="form-control" type="number" style="padding-bottom: -2px;margin: 2px;padding-top: -3px;height: 31px;margin-top: -2px;margin-bottom: 9px;" name="patient_age" placeholder="Enter Age">
-                        <div class="row">
-                            <div class="col-12 col-sm-6 col-md-12 col-lg-6" style="padding-bottom: -29px;">
-                                <div class="form-group mb-3">
-                                    <div class="input-group"><span class="input-group-text"><i class="fa fa-phone"></i></span><input class="form-control" type="text" id="from-phone-1" name="phone" required="" placeholder="Phone Number"></div>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group mb-3">
-                            <div class="row">
-                                <div class="col"><button class="btn btn-primary d-block w-100" type="submit" style="padding-top: 6px;padding-bottom: 6px;margin: 0px;margin-bottom: 9px;margin-top: -17px;">Book&nbsp;<i class="fa fa-chevron-circle-right"></i></button><button class="btn btn-primary d-block w-100" type="reset" style="padding-top: -2px;padding-bottom: 6px;"><i class="fa fa-undo"></i> Reset</button></div>
-                            </div>
-                        </div>
-                        <hr class="d-flex d-md-none">
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal fade" role="dialog" tabindex="-1" id="modal1">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4>Contact Information</h4><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="contactForm-2" action="javascript:void(0);" method="get"><input class="form-control" type="hidden" name="Introduction" value="This email was sent from www.awebsite.com"><input class="form-control" type="hidden" name="subject" value="Awebsite.com Contact Form"><input class="form-control" type="hidden" name="to" value="email@awebsite.com">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div id="successfail-2"></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12 col-md-6" id="message-2">
-                                    <h2 class="h4"><i class="fa fa-envelope"></i> Contact Us<small><small class="required-input">&nbsp;(*required)</small></small></h2>
-                                    <div class="form-group mb-3"><label class="form-label" for="from-name">Name</label><span class="required-input">*</span>
-                                        <div class="input-group"><span class="input-group-text"><i class="fa fa-user-o"></i></span><input class="form-control" type="text" id="from-name-2" name="name" required="" placeholder="Full Name"></div>
-                                    </div>
-                                    <div class="form-group mb-3"><label class="form-label" for="from-email">Email</label><span class="required-input">*</span>
-                                        <div class="input-group"><span class="input-group-text"><i class="fa fa-envelope-o"></i></span><input class="form-control" type="text" id="from-email-2" name="email" required="" placeholder="Email Address"></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 col-sm-6 col-md-12 col-lg-6">
-                                            <div class="form-group mb-3"><label class="form-label" for="from-phone">Phone</label><span class="required-input">*</span>
-                                                <div class="input-group"><span class="input-group-text"><i class="fa fa-phone"></i></span><input class="form-control" type="text" id="from-phone-2" name="phone" required="" placeholder="Primary Phone"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-6 col-md-12 col-lg-6">
-                                            <div class="form-group mb-3"><label class="form-label" for="from-calltime">Best Time to Call</label>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></div><select class="form-select" id="from-calltime-2" name="call time">
-                                                        <optgroup label="Best Time to Call">
-                                                            <option value="Morning" selected="">Morning</option>
-                                                            <option value="Afternoon">Afternoon</option>
-                                                            <option value="Evening">Evening</option>
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group mb-3"><label class="form-label" for="from-comments">Comments</label><textarea class="form-control" id="from-comments-2" name="comments" placeholder="Enter Comments" rows="5"></textarea></div>
-                                    <div class="form-group mb-3">
-                                        <div class="row">
-                                            <div class="col"><button class="btn btn-primary d-block w-100" type="reset"><i class="fa fa-undo"></i> Reset</button></div>
-                                            <div class="col"><button class="btn btn-primary d-block w-100" type="submit">Submit <i class="fa fa-chevron-circle-right"></i></button></div>
-                                        </div>
-                                    </div>
-                                    <hr class="d-flex d-md-none">
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <h2 class="h4"><i class="fa fa-location-arrow"></i> Locate Us</h2>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="static-map"><a rel="noopener" href="https://www.google.com/maps/place/Daytona+International+Speedway/@29.1815062,-81.0744275,15z/data=!4m13!1m7!3m6!1s0x88e6d935da1cced3:0xa6b3e1bc0f2fc83a!2s1801+W+International+Speedway+Blvd,+Daytona+Beach,+FL+32114!3b1!8m2!3d29.187028!4d-81.0703076!3m4!1s0x88e6d949a4cb8593:0x1387c6c0b5c8cc97!8m2!3d29.1851681!4d-81.0705292" target="_blank"> <img class="img-fluid" src="http://maps.googleapis.com/maps/api/staticmap?autoscale=2&amp;size=600x210&amp;maptype=roadmap&amp;format=png&amp;visual_refresh=true&amp;markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C582+1801+W+International+Speedway+Blvd+Daytona+Beach+FL+32114&amp;zoom=12" alt="Google Map of Daytona International Speedway"></a></div>
-                                        </div>
-                                        <div class="col-sm-6 col-md-12 col-lg-6">
-                                            <h2 class="h4"><i class="fa fa-user"></i> Our Info</h2>
-                                            <div><span><strong>Name</strong></span></div>
-                                            <div><span>email@awebsite.com</span></div>
-                                            <div><span>www.awebsite.com</span></div>
-                                            <hr class="d-sm-none d-md-block d-lg-none">
-                                        </div>
-                                        <div class="col-sm-6 col-md-12 col-lg-6">
-                                            <h2 class="h4"><i class="fa fa-location-arrow"></i> Our Address</h2>
-                                            <div><span><strong>Office Name</strong></span></div>
-                                            <div><span>55 Icannot Dr</span></div>
-                                            <div><span>Daytone Beach, FL 85150</span></div>
-                                            <div><abbr data-toggle="tooltip" data-placement="top" title="Office Phone: 555-867-5309">O:</abbr> 555-867-5309</div>
-                                            <hr class="d-sm-none">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-  
-  </form>
-  
-  </div>
-
-  <center>
-    <div class="col-3">
+<center>
+  <div class="col-3">
     <a href="/consolt_page.html">
-  <button type="button" class="btn btn-outline-secondary" id="back_button">Back</button>
-  </a>
+      <button type="button" class="btn btn-outline-secondary" id="back_button">
+        Back
+      </button>
+    </a>
   </div>
-  </center>
-  
-  
-
-  
-
-
+</center>
 
 {% endblock %}
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+  crossorigin="anonymous"
+></script>
 
-
-      <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-
-     
-
-
-{% block js %}   
+{% block js %}
 <script>
-  
   // Example starter JavaScript for disabling form submissions if there are invalid fields
-(function () {
-  'use strict'
-
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  var forms = document.querySelectorAll('.needs-validation')
-
-  // Loop over them and prevent submission
-  Array.prototype.slice.call(forms)
-    .forEach(function (form) {
-      form.addEventListener('submit', function (event) {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-
-        form.classList.add('was-validated')
-      }, false)
-    })
-})()
-
-
+  (function () {
+    "use strict";
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll(".needs-validation");
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms).forEach(function (form) {
+      form.addEventListener(
+        "submit",
+        function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+  })();
 </script>
 {% endblock %}

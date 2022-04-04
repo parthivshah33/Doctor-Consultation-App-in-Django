@@ -66,6 +66,12 @@
   .back_button{
     margin-left:7.6%;
   }
+
+  .d_card{
+    border: 3px dotted grey;
+    border-top: 4px solid brown;
+    box-shadow: 10px 10px 8px 10px #888888;
+  }
    
   /*aa code 3x3 card show karva mate chhe*/
    
@@ -138,7 +144,7 @@
   {% for i in doctors %}
   <div class="item">
        <!-- Box -->
-        <section class="box feature" style="border: 3px dotted grey;">
+        <section class="box feature d_card">
           <div class="card" style="max-width: 540px;">
              <h2 style="color:red;">Name : {{ i.name }}</h2>
             <b style="color:forestgreen;">Degree : {{ i.degree }}</b>
@@ -180,7 +186,7 @@
   </div>
 
 
-  <!-- code 4 showing doctors card is finish here -->
+  <!-- code for showing doctors card is finish here -->
 
 
 

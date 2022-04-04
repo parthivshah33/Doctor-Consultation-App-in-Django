@@ -23,6 +23,12 @@ urlpatterns = [
 
     path("consolt_page.html", views.consolt_page , name = "consolt"),
 
+    # BOOKMARK FEATURES URLS
+    path("bookmarks_add/<int:id>" , views.bookmarks_add , name = "bookmarks"),
+
+    path("my_bookmarks" , views.my_bookmarks , name = "my_bookmarks"),
+    # BOOKMARK FEATURES URLS FINISH HERE
+
     path("left-sidebar.html", views.left_sidebar , name = "leftsidebar"),
 
     path("right-sidebar.html", views.right_sidebar , name = "rightsidebar"),
