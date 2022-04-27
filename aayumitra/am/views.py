@@ -223,7 +223,7 @@ def d_dashboard(request, d_id):
         appointments_record.save()
 
         # New Appointment email sending to Doctor --> code is here
-        subject = f' Greeting Sir , New Appointment from Aayu-Mitra.com'
+        subject = f' Namaste Sir , New Appointment from Aayu-Mitra.com'
         message = f' -> Patient Details <- \n \n' \
                   f' ==> Name : {name}  \n' \
                   f' ==> Gender : {gender} \n' \

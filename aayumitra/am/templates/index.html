@@ -169,7 +169,7 @@
         <div class="row">
           <div class="col-7 col-12-medium">
             <!-- <h7>Welcome To AM</h7> -->
-            <p><strong style="color:gold; text-shadow: 5px 5px 10px #262626;">"Find Nearest Doctor"</strong></p>
+            <p><strong style="color:gold; text-shadow: 5px 5px 10px #262626;">"Find Best Doctor Near You"</strong></p>
             {% if user.is_authenticated %}
               <h1 class="success_login_message"> Welcome {{request.user}} </h1>
             {% else %}
@@ -209,7 +209,11 @@
                 <input class="form-control me-2 search_button" type="search" id="search" name="search" placeholder="Doctors Name" aria-label="Search">
                 <button class="btn btn-outline-success find-doctors" type="submit">Find</button>
               </form>
+              {% if user.is_authenticated %}
               <li><a href="/my_bookmarks" class="button large icon solid fa-arrow-circle-right">Saved Doctors</a></li>
+              {% else %}
+              <li><a href="/" class="button large icon solid fa-arrow-circle-right">Saved Doctors</a></li>
+              {% endif %}
               
               {% if user.is_authenticated %}
               {% else %}
