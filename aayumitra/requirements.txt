@@ -23,7 +23,6 @@ itsdangerous==1.1.0
 legacy==0.1.6
 MarkupSafe==1.1.1
 mysqlclient==2.0.2
-numpy==1.20.1
 parts==1.0.2
 Pillow==8.3.1
 platformdirs==2.4.0
